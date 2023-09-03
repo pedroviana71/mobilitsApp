@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {setUserEmail} from '../../../features/userSlice';
+import {setUserEmail, setUserPassword} from '../../../features/userSlice';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
@@ -14,7 +14,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [passwordMatchs, setPasswordMatchs] = useState(true);
   const [canSubmit, setCanSubmit] = useState(false);
   const dispatch = useDispatch();
 
@@ -31,29 +31,27 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   };
 
   const handlePassword = (pwd: string) => {
-    setIsPasswordValid(true);
+    setPasswordMatchs(true);
     setPassword(pwd);
   };
 
   const handlePasswordConfirmation = (confirmPwd: string) => {
-    setIsPasswordValid(true);
+    setPasswordMatchs(true);
     setPasswordConfirmation(confirmPwd);
   };
 
   const handleSubmit = () => {
     if (password !== passwordConfirmation) {
-      setIsPasswordValid(false);
+      setPasswordMatchs(false);
+      return;
     }
 
     if (!canSubmit) {
       return;
     }
 
-    if (!isPasswordValid) {
-      return;
-    }
-
     dispatch(setUserEmail(email));
+    dispatch(setUserPassword(password));
     navigation.navigate('UserNames');
   };
 
@@ -63,9 +61,10 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.inputsContainer}>
         <Text style={styles.title}>Criar conta</Text>
-        <View style={styles.inputsContainer}>
+        <View>
+          <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="Email"
             onChangeText={handleEmail}
@@ -73,23 +72,33 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
             style={styles.input}
             autoCapitalize="none"
           />
-          <View style={!isPasswordValid && styles.inputView}>
-            <TextInput
-              placeholder="Senha"
-              onChangeText={handlePassword}
-              value={password}
-              style={styles.input}
-              secureTextEntry
-            />
+        </View>
+        <View style={styles.inputsContainer}>
+          <View>
+            <Text style={styles.label}>Senha</Text>
+            <View style={!passwordMatchs && styles.inputView}>
+              <TextInput
+                placeholder="Senha"
+                onChangeText={handlePassword}
+                value={password}
+                style={styles.input}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </View>
           </View>
-          <View style={!isPasswordValid && styles.inputView}>
-            <TextInput
-              placeholder="Digite a senha novamente"
-              onChangeText={handlePasswordConfirmation}
-              value={passwordConfirmation}
-              style={styles.input}
-              secureTextEntry
-            />
+          <View>
+            <Text style={styles.label}>Repita a senha</Text>
+            <View style={!passwordMatchs && styles.inputView}>
+              <TextInput
+                placeholder="Digite a senha novamente"
+                onChangeText={handlePasswordConfirmation}
+                value={passwordConfirmation}
+                style={styles.input}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -135,6 +144,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: 'red',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666666',
+    marginBottom: 8,
   },
   input: {
     backgroundColor: '#F6F6F6',

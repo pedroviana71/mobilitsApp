@@ -1,8 +1,16 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 
 const CarInformartions = () => {
-  return <View>Car Info</View>;
+  const states = useSelector(state => state);
+
+  console.log(states);
+  return (
+    <View>
+      <Text>teste</Text>
+    </View>
+  );
 };
 
 export default CarInformartions;

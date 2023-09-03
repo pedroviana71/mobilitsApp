@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setUserEmail} from '../../../features/userSlice';
@@ -14,23 +14,46 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [canSubmit, setCanSubmit] = useState(false);
   const dispatch = useDispatch();
 
-  const handleEmail = (e: string) => {
-    setEmail(e);
+  useEffect(() => {
+    if (password && passwordConfirmation && email) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  }, [password, passwordConfirmation, email]);
+
+  const handleEmail = (userEmail: string) => {
+    setEmail(userEmail);
   };
 
   const handlePassword = (pwd: string) => {
+    setIsPasswordValid(true);
     setPassword(pwd);
   };
 
   const handlePasswordConfirmation = (confirmPwd: string) => {
+    setIsPasswordValid(true);
     setPasswordConfirmation(confirmPwd);
   };
 
   const handleSubmit = () => {
+    if (password !== passwordConfirmation) {
+      setIsPasswordValid(false);
+    }
+
+    if (!canSubmit) {
+      return;
+    }
+
+    if (!isPasswordValid) {
+      return;
+    }
+
     dispatch(setUserEmail(email));
-    console.log(email, password, passwordConfirmation);
     navigation.navigate('UserNames');
   };
 
@@ -42,30 +65,39 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>Criar conta</Text>
-        <TextInput
-          placeholder="Email"
-          onChangeText={handleEmail}
-          value={email}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Senha"
-          onChangeText={handlePassword}
-          value={password}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Digite a senha novamente"
-          onChangeText={handlePasswordConfirmation}
-          value={passwordConfirmation}
-          style={styles.input}
-        />
+        <View style={styles.inputsContainer}>
+          <TextInput
+            placeholder="Email"
+            onChangeText={handleEmail}
+            value={email}
+            style={styles.input}
+            autoCapitalize="none"
+          />
+          <View style={!isPasswordValid && styles.inputView}>
+            <TextInput
+              placeholder="Senha"
+              onChangeText={handlePassword}
+              value={password}
+              style={styles.input}
+              secureTextEntry
+            />
+          </View>
+          <View style={!isPasswordValid && styles.inputView}>
+            <TextInput
+              placeholder="Digite a senha novamente"
+              onChangeText={handlePasswordConfirmation}
+              value={passwordConfirmation}
+              style={styles.input}
+              secureTextEntry
+            />
+          </View>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <AppButton
           onPress={handleSubmit}
           title="Próximo"
-          backgroundColor="#5DB075"
+          backgroundColor={canSubmit ? '#5DB075' : '#90C59F'}
           textColor="#E9ECED"
         />
         <AppButton
@@ -96,10 +128,17 @@ const styles = StyleSheet.create({
     color: '#4B9460',
     marginBottom: 32,
   },
+  inputsContainer: {
+    gap: 16,
+  },
+  inputView: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: 'red',
+  },
   input: {
     backgroundColor: '#F6F6F6',
     borderRadius: 8,
-    marginBottom: 16,
     paddingLeft: 8,
   },
   buttonContainer: {

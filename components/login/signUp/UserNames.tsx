@@ -5,7 +5,7 @@ import {RootState} from '../../../app/store';
 
 const UserNames = () => {
   const user = useSelector((state: RootState) => state.user);
-  console.log(user, 'user');
+  console.log(user);
   return (
     <View>
       <Text>Username</Text>

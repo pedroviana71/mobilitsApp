@@ -61,19 +61,19 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputsContainer}>
+      <View>
         <Text style={styles.title}>Criar conta</Text>
-        <View>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Email"
-            onChangeText={handleEmail}
-            value={email}
-            style={styles.input}
-            autoCapitalize="none"
-          />
-        </View>
         <View style={styles.inputsContainer}>
+          <View>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              placeholder="Email"
+              onChangeText={handleEmail}
+              value={email}
+              style={styles.input}
+              autoCapitalize="none"
+            />
+          </View>
           <View>
             <Text style={styles.label}>Senha</Text>
             <View style={!passwordMatchs && styles.inputView}>
@@ -99,6 +99,9 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
                 autoCapitalize="none"
               />
             </View>
+            {!passwordMatchs && (
+              <Text style={styles.passwordAlert}>As senhas não conferem</Text>
+            )}
           </View>
         </View>
       </View>
@@ -143,13 +146,19 @@ const styles = StyleSheet.create({
   inputView: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: 'red',
+    borderColor: '#EC5B5B',
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
     color: '#666666',
     marginBottom: 8,
+  },
+  passwordAlert: {
+    color: '#EC5B5B',
+    fontSize: 12,
+    fontWeight: '400',
+    marginVertical: 4,
   },
   input: {
     backgroundColor: '#F6F6F6',

@@ -22,13 +22,13 @@ const Welcome = ({navigation}: WelcomeScreenProps) => {
         <AppButton
           onPress={() => navigation.navigate('Login')}
           title="Login"
-          color="#5DB075"
+          backgroundColor="#5DB075"
           textColor="#F6F6F6"
         />
         <AppButton
           onPress={() => navigation.navigate('UserCredentials')}
           title="Criar Conta"
-          color="#F6F6F6"
+          backgroundColor="#F6F6F6"
         />
       </View>
     </View>
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#E9ECED',
   },
   logo: {
     alignSelf: 'center',

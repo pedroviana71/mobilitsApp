@@ -3,6 +3,7 @@ import {Button, Text, View} from 'react-native';
 import {useLoginMutation} from '../../services/user';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
 };

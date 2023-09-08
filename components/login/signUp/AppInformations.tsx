@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-const AppCredentials = () => {
+const AppInformations = () => {
   return (
     <View>
-      <Text>App Credentials</Text>
+      <Text>App infos</Text>
     </View>
   );
 };
 
-export default AppCredentials;
+export default AppInformations;

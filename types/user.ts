@@ -6,6 +6,8 @@ export interface UserLogin {
 export interface UserRegister extends UserLogin {
   firstName: string;
   lastName: string;
+  isCarRented: boolean;
+  rentValue?: string;
 }
 
 export interface Tokens {

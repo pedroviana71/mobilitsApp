@@ -6,6 +6,8 @@ const initialState: UserRegister = {
   lastName: '',
   email: '',
   password: '',
+  isCarRented: false,
+  rentValue: '',
 };
 
 export const userSlice = createSlice({
@@ -24,6 +26,12 @@ export const userSlice = createSlice({
     setUserPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload;
     },
+    setIsUserCarRented: (state, action: PayloadAction<boolean>) => {
+      state.isCarRented = action.payload;
+    },
+    setUserCarRentValue: (state, action: PayloadAction<string>) => {
+      state.rentValue = action.payload;
+    },
   },
 });
 
@@ -32,6 +40,8 @@ export const {
   setUserLastName,
   setUserEmail,
   setUserPassword,
+  setIsUserCarRented,
+  setUserCarRentValue,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -3,6 +3,7 @@ import {Button, Text, View} from 'react-native';
 import {useLoginMutation} from '../../services/user';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import * as Keychain from 'react-native-keychain';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -13,11 +14,9 @@ const Home = ({navigation}: HomeScreenProps) => {
   const [login] = useLoginMutation();
 
   const user = async () => {
-    const response = await login({email: 'tsa@gmail.com', password: 'latela'});
-    console.log(response);
-    setText(JSON.stringify(response));
-    navigation.navigate('Welcome');
-    return response;
+    const accessToken = await Keychain.getGenericPassword();
+
+    console.log(accessToken);
   };
 
   return (

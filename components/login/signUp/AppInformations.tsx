@@ -7,6 +7,7 @@ import AppButton from '../../custom/Button';
 import {setUserApps} from '../../../features/userSlice';
 import {useCreateUserMutation} from '../../../services/user';
 import {RootState} from '../../../app/store';
+import * as Keychain from 'react-native-keychain';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -43,6 +44,17 @@ const AppInformations = ({navigation}: UserCredentialsProps) => {
       console.log(data.error);
     } else {
       console.log(data.data);
+      await Keychain.setGenericPassword('accessToken', data.data.accessToken, {
+        service: 'accessToken',
+      });
+      await Keychain.setGenericPassword(
+        'refreshToken',
+        data.data.refreshToken,
+        {
+          service: 'refreshToken',
+        },
+      );
+      navigation.navigate('Home');
     }
   };
 

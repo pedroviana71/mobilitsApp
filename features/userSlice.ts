@@ -2,20 +2,21 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {UserRegister} from '../types/user';
 
 const initialState: UserRegister = {
-  firstName: '',
+  name: '',
   lastName: '',
   email: '',
   password: '',
   isCarRented: false,
-  rentValue: '',
+  rentPrice: 0,
+  apps: [],
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserFirstName: (state, action: PayloadAction<string>) => {
-      state.firstName = action.payload;
+    setUserName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
     },
     setUserLastName: (state, action: PayloadAction<string>) => {
       state.lastName = action.payload;
@@ -29,19 +30,23 @@ export const userSlice = createSlice({
     setIsUserCarRented: (state, action: PayloadAction<boolean>) => {
       state.isCarRented = action.payload;
     },
-    setUserCarRentValue: (state, action: PayloadAction<string>) => {
-      state.rentValue = action.payload;
+    setUserCarRentPrice: (state, action: PayloadAction<number>) => {
+      state.rentPrice = action.payload;
+    },
+    setUserApps: (state, action: PayloadAction<string[]>) => {
+      state.apps = action.payload;
     },
   },
 });
 
 export const {
-  setUserFirstName,
+  setUserName,
   setUserLastName,
   setUserEmail,
   setUserPassword,
   setIsUserCarRented,
-  setUserCarRentValue,
+  setUserCarRentPrice,
+  setUserApps,
 } = userSlice.actions;
 
 export default userSlice.reducer;

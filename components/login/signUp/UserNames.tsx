@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
-import {setUserFirstName, setUserLastName} from '../../../features/userSlice';
+import {setUserName, setUserLastName} from '../../../features/userSlice';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -38,7 +38,7 @@ const UserNames = ({navigation}: UserCredentialsProps) => {
       return;
     }
 
-    dispatch(setUserFirstName(name));
+    dispatch(setUserName(name));
     dispatch(setUserLastName(lastName));
     navigation.navigate('CarInformations');
   };

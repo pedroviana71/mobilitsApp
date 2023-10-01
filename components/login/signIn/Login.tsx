@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import AppButton from '../../custom/Button';
+import {useLoginMutation} from '../../../services/user';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [login] = useLoginMutation();
 
   const handleEmail = (text: string) => {
     setEmail(text);
@@ -14,7 +16,10 @@ const Login = () => {
     setPassword(pwd);
   };
 
-  const handleSignIn = () => {};
+  const handleSignIn = async () => {
+    const response = await login({email: 'tsa@gmail.com', password: 'latela'});
+    console.log(response);
+  };
 
   return (
     <View style={styles.container}>

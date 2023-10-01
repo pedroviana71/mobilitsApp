@@ -7,7 +7,7 @@ import AppButton from '../../custom/Button';
 import CheckBox from '@react-native-community/checkbox';
 import {
   setIsUserCarRented,
-  setUserCarRentValue,
+  setUserCarRentPrice,
 } from '../../../features/userSlice';
 
 type UserCredentialsProps = {
@@ -18,16 +18,15 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [isCarRented, setIsCarRented] = useState(false);
   const [isOwnCar, setIsOwnCar] = useState(false);
-  const [rentValue, setRentValue] = useState('');
+  const [rentPrice, setRentPrice] = useState('');
 
   useEffect(() => {
-    console.log(rentValue);
-    if (rentValue !== '0' || isOwnCar) {
+    if (rentPrice !== '0' || isOwnCar) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
     }
-  }, [isOwnCar, rentValue]);
+  }, [isOwnCar, rentPrice]);
 
   const dispatch = useDispatch();
 
@@ -39,7 +38,7 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
       currency: 'BRL',
     }).format(number / 100);
 
-    setRentValue(money);
+    setRentPrice(money);
   };
 
   const handleOwnCar = (value: boolean) => {
@@ -51,7 +50,7 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
 
   const handleCarRented = (value: boolean) => {
     setIsCarRented(value);
-    setRentValue('0');
+    setRentPrice('0');
     if (isOwnCar) {
       setIsOwnCar(false);
     }
@@ -62,10 +61,12 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
       return;
     }
 
-    const rent = parseFloat(rentValue.replace(/[^\d,]/g, '')).toFixed(2);
-
     dispatch(setIsUserCarRented(isCarRented));
-    dispatch(setUserCarRentValue(rent));
+
+    if (!isOwnCar) {
+      const rent = parseFloat(rentPrice.replace(/[^\d,]/g, '')).toFixed(2);
+      dispatch(setUserCarRentPrice(Number(rent)));
+    }
 
     navigation.navigate('AppInformations');
   };
@@ -97,7 +98,7 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
               </Text>
               <TextInput
                 placeholder="Valor do aluguel"
-                value={rentValue}
+                value={rentPrice}
                 onChangeText={handleRentValue}
                 style={styles.input}
                 keyboardType="numeric"

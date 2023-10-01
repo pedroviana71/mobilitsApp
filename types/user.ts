@@ -4,10 +4,11 @@ export interface UserLogin {
 }
 
 export interface UserRegister extends UserLogin {
-  firstName: string;
+  name: string;
   lastName: string;
   isCarRented: boolean;
-  rentValue?: string;
+  rentPrice?: number;
+  apps: string[];
 }
 
 export interface Tokens {

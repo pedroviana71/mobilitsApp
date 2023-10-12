@@ -1,14 +1,30 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
+import getTokens from '../../../utils/getTokens';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
 };
 
 const Welcome = ({navigation}: WelcomeScreenProps) => {
+  useEffect(() => {
+    const checkUser = async () => {
+      const tokens = await getTokens();
+      return tokens;
+    };
+
+    checkUser().then(user => {
+      if (!user) {
+        navigation.navigate('Login');
+      } else {
+        navigation.navigate('Home');
+      }
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <View>

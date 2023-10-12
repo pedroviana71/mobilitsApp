@@ -43,16 +43,15 @@ const AppInformations = ({navigation}: UserCredentialsProps) => {
     if ('error' in data) {
       console.log(data.error);
     } else {
-      console.log(data.data);
-      await Keychain.setGenericPassword('accessToken', data.data.accessToken, {
-        service: 'accessToken',
-      });
-      await Keychain.setGenericPassword(
+      await Keychain.setInternetCredentials(
+        'accessToken',
+        user.name,
+        data.data.accessToken,
+      );
+      await Keychain.setInternetCredentials(
         'refreshToken',
+        user.name,
         data.data.refreshToken,
-        {
-          service: 'refreshToken',
-        },
       );
       navigation.navigate('Home');
     }

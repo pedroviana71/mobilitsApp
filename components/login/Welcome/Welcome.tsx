@@ -13,6 +13,7 @@ const Welcome = ({navigation}: WelcomeScreenProps) => {
   useEffect(() => {
     const checkUser = async () => {
       const tokens = await getTokens();
+      console.log(tokens);
       return tokens;
     };
 

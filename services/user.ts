@@ -17,8 +17,15 @@ const userApi = api.injectEndpoints({
         body: createUser,
       }),
     }),
+    apiCheck: build.mutation({
+      query: () => ({
+        url: '/auth/check',
+        method: 'POST',
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const {useLoginMutation, useCreateUserMutation} = userApi;
+export const {useLoginMutation, useCreateUserMutation, useApiCheckMutation} =
+  userApi;

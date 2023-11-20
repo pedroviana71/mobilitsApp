@@ -6,6 +6,8 @@ import type {
 } from '@reduxjs/toolkit/query';
 import getTokens from '../utils/getTokens';
 import * as Keychain from 'react-native-keychain';
+import {Tokens} from '../types/user';
+import {resetTokens} from '../utils/resetTokens';
 
 type dataType = {
   message: string;
@@ -21,6 +23,7 @@ const baseQuery = fetchBaseQuery({
     if (tokens) {
       headers.set('authorization', `Bearer ${tokens.accessToken}`);
     }
+    console.log('passei');
     return headers;
   },
 });
@@ -32,9 +35,11 @@ export const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   const tokens = await getTokens();
+  const userId = await Keychain.getInternetCredentials('userId');
 
   if (
     tokens &&
+    userId &&
     result.error &&
     result.error.status === 401 &&
     (result.error.data as dataType).message === 'Token expired'
@@ -44,6 +49,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         url: '/auth/refresh',
         method: 'POST',
         body: {
+          userId: userId.password,
           refreshToken: tokens.refreshToken,
         },
       },
@@ -51,13 +57,36 @@ export const baseQueryWithReauth: BaseQueryFn<
       extraOptions,
     );
 
-    console.log(refreshResult, 'AQUIPORRA');
     if (refreshResult.data) {
-      // api.dispatch();
+      const newTokens = refreshResult.data as Tokens;
+
+      await resetTokens();
+
+      await Keychain.setInternetCredentials(
+        'accessToken',
+        'accessToken',
+        newTokens.accessToken,
+      );
+      await Keychain.setInternetCredentials(
+        'refreshToken',
+        'refreshToken',
+        newTokens.refreshToken,
+      );
 
       result = await baseQuery(args, api, extraOptions);
     } else {
-      // api.dispatch();
+      await resetTokens();
+      await baseQuery(
+        {
+          url: '/auth/logout',
+          method: 'POST',
+          body: {
+            id: userId.password,
+          },
+        },
+        api,
+        extraOptions,
+      );
     }
   }
   return result;

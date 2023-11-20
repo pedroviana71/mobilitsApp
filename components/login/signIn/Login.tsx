@@ -2,8 +2,15 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import AppButton from '../../custom/Button';
 import {useLoginMutation} from '../../../services/user';
+import * as Keychain from 'react-native-keychain';
+import {RootStackParamList} from '../../../App';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const Login = () => {
+type UserCredentialsProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
+};
+
+const Login = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login] = useLoginMutation();
@@ -18,7 +25,32 @@ const Login = () => {
 
   const handleSignIn = async () => {
     const response = await login({email: 'tsa@gmail.com', password: 'latela'});
-    console.log(response);
+
+    if ('error' in response) {
+      console.log(response.error);
+      return;
+    }
+
+    console.log(response.data, 'response signin');
+
+    const username = response.data.user.name;
+
+    await Keychain.setInternetCredentials(
+      'userId',
+      username,
+      response.data.user._id,
+    );
+    await Keychain.setInternetCredentials(
+      'accessToken',
+      username,
+      response.data.tokens.accessToken,
+    );
+    await Keychain.setInternetCredentials(
+      'refreshToken',
+      username,
+      response.data.tokens.refreshToken,
+    );
+    navigation.navigate('Home');
   };
 
   return (

@@ -1,9 +1,14 @@
-import {Tokens, UserLogin, UserRegister} from '../types/user';
+import {
+  Tokens,
+  UserLogin,
+  UserRegister,
+  UserLoginResponse,
+} from '../types/user';
 import {api} from './api';
 
 const userApi = api.injectEndpoints({
   endpoints: build => ({
-    login: build.mutation<Tokens, UserLogin>({
+    login: build.mutation<UserLoginResponse, UserLogin>({
       query: (user: UserLogin) => ({
         url: '/auth/login',
         method: 'POST',

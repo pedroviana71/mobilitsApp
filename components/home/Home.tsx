@@ -20,7 +20,7 @@ const Home = ({navigation}: HomeScreenProps) => {
       </View>
       <Earnings />
       <Goals />
-      <Footer />
+      <Footer navigate={navigation.navigate} />
     </View>
   );
 };

@@ -1,12 +1,22 @@
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-const Footer = () => {
+import {RootStackParamList} from '../../App';
+type FooterProps = {
+  navigate: NativeStackNavigationProp<RootStackParamList>['navigate'];
+};
+
+const Footer = ({navigate}: FooterProps) => {
+  const handleCreateRevenue = () => {
+    navigate('Revenue');
+  };
+
   return (
     <View style={styles.container}>
       <Icon style={styles.icon} name="home" />
       <Icon style={styles.icon} name="bar-chart" />
-      <Icon style={styles.addIcon} name="add" />
+      <Icon style={styles.addIcon} name="add" onPress={handleCreateRevenue} />
       <Icon style={styles.icon} name="bookmark-add" />
       <Icon style={styles.icon} name="settings" />
     </View>

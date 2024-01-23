@@ -10,7 +10,7 @@ import UserNames from './components/login/signUp/UserNames';
 import AppInformations from './components/login/signUp/AppInformations';
 import CarInformartions from './components/login/signUp/CarInformartions';
 import Login from './components/login/signIn/Login';
-import Revenue from './components/createRevenue/Revenue';
+import CreateRevenueExpense from './components/createRevenueExpense/CreateRevenueExpense';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -38,7 +38,7 @@ function App(): JSX.Element {
           <Stack.Screen name="UserNames" component={UserNames} />
           <Stack.Screen name="CarInformations" component={CarInformartions} />
           <Stack.Screen name="AppInformations" component={AppInformations} />
-          <Stack.Screen name="Revenue" component={Revenue} />
+          <Stack.Screen name="Revenue" component={CreateRevenueExpense} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

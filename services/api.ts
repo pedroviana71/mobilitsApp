@@ -16,14 +16,14 @@ type dataType = {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://192.168.40.114:3000/',
+  baseUrl: 'http://192.168.40.115:3000/', //ip do modem de fortal
+  // baseUrl: 'http://192.168.15.1:3000/', // ip do modem de minas
   credentials: 'include',
   prepareHeaders: async headers => {
     const tokens = await getTokens();
     if (tokens) {
       headers.set('authorization', `Bearer ${tokens.accessToken}`);
     }
-    console.log('passei');
     return headers;
   },
 });

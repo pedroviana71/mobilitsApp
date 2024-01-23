@@ -7,6 +7,9 @@ interface ButtonProps {
   backgroundColor: string;
   textColor?: string;
   fontWeight?: 'bold' | 'normal' | '300' | '600' | '900';
+  width?: string;
+  elevation?: number;
+  shadowColor?: string;
 }
 
 const AppButton = ({
@@ -15,11 +18,17 @@ const AppButton = ({
   backgroundColor,
   textColor,
   fontWeight,
+  width,
+  elevation,
+  shadowColor,
 }: ButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.container, {backgroundColor}]}>
+      style={[
+        styles.container,
+        {backgroundColor, width, elevation, shadowColor},
+      ]}>
       <Text style={[styles.text, {color: textColor, fontWeight}]}>{title}</Text>
     </TouchableOpacity>
   );

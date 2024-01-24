@@ -4,6 +4,7 @@ import HorizontalSeparator from '../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AppButton from '../custom/Button';
 import PickDate from './PickDate';
+import Dropdown from '../custom/Dropdown';
 
 interface FormRevenueExpenseProps {
   isRevenue: boolean;
@@ -23,7 +24,7 @@ const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
         {isRevenue ? (
           <View style={styles.inputs}>
             <Icon name="description" style={styles.icon} />
-            <TextInput placeholder="Selecione o app" />
+            <Dropdown label="Selecionar o app" />
           </View>
         ) : (
           <View style={styles.inputs}>

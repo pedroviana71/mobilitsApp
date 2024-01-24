@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Icon} from 'react-native-vector-icons/Icon';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const PickDate = () => {
   const [dateSelected, setDateSelected] = useState({
     today: true,
@@ -12,9 +11,11 @@ const PickDate = () => {
   const handleDate = (date: string) => {
     if (date === 'today') {
       setDateSelected({today: true, yesterday: false, anotherDate: false});
-    } else if (date === 'yesterday') {
+    }
+    if (date === 'yesterday') {
       setDateSelected({today: false, yesterday: true, anotherDate: false});
-    } else if (date === 'anotherDate') {
+    }
+    if (date === 'anotherDate') {
       setDateSelected({today: false, yesterday: false, anotherDate: true});
     }
   };

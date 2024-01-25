@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {RefObject, useRef, useState} from 'react';
+import {FlatList, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -23,24 +23,38 @@ const mockData = [
 
 const Dropdown = ({label}: DropdownProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<TouchableOpacity>(null);
+  const [dropdownTop, setDropdownTop] = useState(0);
+
   const handleShowDropdown = () => {
+    dropdownRef.current?.measure((_fx, _fy, _w, h, _px, py) => {
+      setDropdownTop(h + py);
+    });
     setShowDropdown(!showDropdown);
   };
 
   return (
     <View>
-      <TouchableOpacity onPress={handleShowDropdown}>
+      <TouchableOpacity onPress={handleShowDropdown} ref={dropdownRef}>
         <View style={styles.labelContainer}>
           <Text>{label}</Text>
           <Icon name="arrow-drop-down" />
         </View>
       </TouchableOpacity>
       {showDropdown && (
-        <FlatList
-          style={styles.dropdown}
-          data={mockData}
-          renderItem={({item}) => <Text>{item.name}</Text>}
-        />
+        <Modal visible={showDropdown} transparent>
+          <TouchableOpacity
+            onPress={handleShowDropdown}
+            style={{height: '100%'}}>
+            <FlatList
+              style={(styles.dropdown, {top: dropdownTop, left: 50})}
+              data={mockData}
+              renderItem={({item}) => (
+                <Text onPress={() => console.log(item.name)}>{item.name}</Text>
+              )}
+            />
+          </TouchableOpacity>
+        </Modal>
       )}
     </View>
   );
@@ -53,8 +67,8 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: 20,
-    left: 8,
+    backgroundColor: 'red',
+    zIndex: 1,
   },
 });
 export default Dropdown;

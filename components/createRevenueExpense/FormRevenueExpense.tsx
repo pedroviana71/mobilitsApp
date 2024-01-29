@@ -1,25 +1,39 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AppButton from '../custom/Button';
 import PickDate from './PickDate';
 import Dropdown from '../custom/Dropdown';
+import {priceMask} from '../../utils/priceMask';
 
 interface FormRevenueExpenseProps {
   isRevenue: boolean;
 }
 
 const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
+  const [monetaryValue, setMonetaryValue] = useState('');
+  const [date, setDate] = useState(new Date());
+
+  const handleMonetaryValue = (value: string) => {
+    setMonetaryValue(priceMask(value));
+  };
+
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.inputs}>
           <Icon name="attach-money" style={styles.icon} />
-          <TextInput placeholder="R$ 0,00" style={styles.moneyInput} />
+          <TextInput
+            placeholder="R$ 0,00"
+            style={styles.moneyInput}
+            inputMode="numeric"
+            onChangeText={handleMonetaryValue}
+            value={monetaryValue.replace('.', ',')}
+          />
         </View>
         <HorizontalSeparator />
-        <PickDate />
+        <PickDate date={date} setDate={setDate} />
         <HorizontalSeparator />
         {isRevenue ? (
           <View style={styles.inputs}>
@@ -63,7 +77,8 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   moneyInput: {
-    fontSize: 24,
+    fontSize: 30,
+    color: '#4B9460',
   },
   comments: {
     padding: 8,

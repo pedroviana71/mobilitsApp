@@ -33,6 +33,11 @@ const Dropdown = ({label}: DropdownProps) => {
     setShowDropdown(!showDropdown);
   };
 
+  const handleClickItem = (item: {name: string; id: number}) => {
+    console.log(item);
+    setShowDropdown(false);
+  };
+
   return (
     <View>
       <TouchableOpacity onPress={handleShowDropdown} ref={dropdownRef}>
@@ -45,12 +50,24 @@ const Dropdown = ({label}: DropdownProps) => {
         <Modal visible={showDropdown} transparent>
           <TouchableOpacity
             onPress={handleShowDropdown}
-            style={{height: '100%'}}>
+            style={styles.touchableContainer}>
+            <Text style={{width: 100, height: 100, backgroundColor: 'blue'}}>
+              oiiiii
+            </Text>
             <FlatList
-              style={(styles.dropdown, {top: dropdownTop, left: 50})}
+              style={
+                (styles.dropdown,
+                {
+                  top: dropdownTop,
+                  left: 50,
+                  backgroundColor: 'red',
+                  width: 200,
+                  height: 200,
+                })
+              }
               data={mockData}
               renderItem={({item}) => (
-                <Text onPress={() => console.log(item.name)}>{item.name}</Text>
+                <Text onPress={() => handleClickItem(item)}>{item.name}</Text>
               )}
             />
           </TouchableOpacity>
@@ -59,6 +76,7 @@ const Dropdown = ({label}: DropdownProps) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   labelContainer: {
     flexDirection: 'row',
@@ -67,8 +85,10 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    backgroundColor: 'red',
-    zIndex: 1,
+  },
+  touchableContainer: {
+    height: '100%',
   },
 });
+
 export default Dropdown;

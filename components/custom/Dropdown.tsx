@@ -5,23 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface DropdownProps {
   label: string;
+  data: {name: string; id: number}[];
+  onClickItem: (item: {name: string; id: number}) => void;
 }
-const mockData = [
-  {
-    id: 1,
-    name: 'Uber',
-  },
-  {
-    id: 2,
-    name: '99',
-  },
-  {
-    id: 3,
-    name: 'Mercado Livre',
-  },
-];
 
-const Dropdown = ({label}: DropdownProps) => {
+const Dropdown = ({label, data, onClickItem}: DropdownProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<TouchableOpacity>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
@@ -34,15 +22,19 @@ const Dropdown = ({label}: DropdownProps) => {
   };
 
   const handleClickItem = (item: {name: string; id: number}) => {
-    console.log(item);
     setShowDropdown(false);
+    if (item.name === 'Adicionar Item') {
+      //! criar funcao pra levar para a tela de adicionar aplicativo
+      return;
+    }
+    onClickItem(item);
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity onPress={handleShowDropdown} ref={dropdownRef}>
         <View style={styles.labelContainer}>
-          <Text>{label}</Text>
+          <Text style={styles.label}>{label}</Text>
           <Icon name="arrow-drop-down" />
         </View>
       </TouchableOpacity>
@@ -51,23 +43,19 @@ const Dropdown = ({label}: DropdownProps) => {
           <TouchableOpacity
             onPress={handleShowDropdown}
             style={styles.touchableContainer}>
-            <Text style={{width: 100, height: 100, backgroundColor: 'blue'}}>
-              oiiiii
-            </Text>
             <FlatList
-              style={
-                (styles.dropdown,
+              style={[
+                styles.dropdown,
                 {
                   top: dropdownTop,
                   left: 50,
-                  backgroundColor: 'red',
-                  width: 200,
-                  height: 200,
-                })
-              }
-              data={mockData}
+                },
+              ]}
+              data={data.length > 0 ? data : [{name: 'Adicionar Item', id: 0}]}
               renderItem={({item}) => (
-                <Text onPress={() => handleClickItem(item)}>{item.name}</Text>
+                <Text onPress={() => handleClickItem(item)} style={styles.text}>
+                  {item.name}
+                </Text>
               )}
             />
           </TouchableOpacity>
@@ -78,16 +66,33 @@ const Dropdown = ({label}: DropdownProps) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
   labelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 8,
+    width: '100%',
+  },
+  label: {
+    fontSize: 18,
   },
   dropdown: {
+    marginTop: 8,
     position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    shadowColor: '#000000',
+    elevation: 3,
+    padding: 8,
   },
   touchableContainer: {
     height: '100%',
+  },
+  text: {
+    fontSize: 18,
+    paddingVertical: 8,
   },
 });
 

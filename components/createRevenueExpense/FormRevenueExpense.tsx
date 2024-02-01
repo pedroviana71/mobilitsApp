@@ -38,7 +38,11 @@ const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
         {isRevenue ? (
           <View style={styles.inputs}>
             <Icon name="description" style={styles.icon} />
-            <Dropdown label="Selecionar o app" />
+            <Dropdown
+              label="Selecionar o app"
+              onClickItem={() => {}}
+              data={[]}
+            />
           </View>
         ) : (
           <View style={styles.inputs}>

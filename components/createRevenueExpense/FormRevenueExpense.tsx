@@ -41,6 +41,7 @@ const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
             <Dropdown
               label="Selecionar o app"
               onClickItem={() => {}}
+              onClickAddItem={() => {}}
               data={[]}
             />
           </View>

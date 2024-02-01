@@ -1,5 +1,11 @@
-import React, {RefObject, useRef, useState} from 'react';
-import {FlatList, Modal, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -7,9 +13,15 @@ interface DropdownProps {
   label: string;
   data: {name: string; id: number}[];
   onClickItem: (item: {name: string; id: number}) => void;
+  onClickAddItem: () => void;
 }
 
-const Dropdown = ({label, data, onClickItem}: DropdownProps) => {
+const Dropdown = ({
+  label,
+  data,
+  onClickItem,
+  onClickAddItem,
+}: DropdownProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<TouchableOpacity>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
@@ -24,7 +36,7 @@ const Dropdown = ({label, data, onClickItem}: DropdownProps) => {
   const handleClickItem = (item: {name: string; id: number}) => {
     setShowDropdown(false);
     if (item.name === 'Adicionar Item') {
-      //! criar funcao pra levar para a tela de adicionar aplicativo
+      onClickAddItem();
       return;
     }
     onClickItem(item);
@@ -40,7 +52,7 @@ const Dropdown = ({label, data, onClickItem}: DropdownProps) => {
       </TouchableOpacity>
       {showDropdown && (
         <Modal visible={showDropdown} transparent>
-          <TouchableOpacity
+          <Pressable
             onPress={handleShowDropdown}
             style={styles.touchableContainer}>
             <FlatList
@@ -58,7 +70,7 @@ const Dropdown = ({label, data, onClickItem}: DropdownProps) => {
                 </Text>
               )}
             />
-          </TouchableOpacity>
+          </Pressable>
         </Modal>
       )}
     </View>

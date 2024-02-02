@@ -46,12 +46,17 @@ const AppInformations = ({navigation}: UserCredentialsProps) => {
       await Keychain.setInternetCredentials(
         'accessToken',
         user.name,
-        data.data.accessToken,
+        data.data.tokens.accessToken,
       );
       await Keychain.setInternetCredentials(
         'refreshToken',
         user.name,
-        data.data.refreshToken,
+        data.data.tokens.refreshToken,
+      );
+      await Keychain.setInternetCredentials(
+        'userId',
+        user.name,
+        data.data.user._id,
       );
       navigation.navigate('Home');
     }

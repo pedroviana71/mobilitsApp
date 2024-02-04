@@ -11,6 +11,7 @@ import AppInformations from './components/login/signUp/AppInformations';
 import CarInformartions from './components/login/signUp/CarInformartions';
 import Login from './components/login/signIn/Login';
 import CreateRevenueExpense from './components/createRevenueExpense/CreateRevenueExpense';
+import AddNewApp from './components/profile/AddNewApp';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   UserCredentials: undefined;
   Login: undefined;
   Revenue: undefined;
+  AddApp: undefined;
 };
 
 function App(): JSX.Element {
@@ -39,6 +41,7 @@ function App(): JSX.Element {
           <Stack.Screen name="CarInformations" component={CarInformartions} />
           <Stack.Screen name="AppInformations" component={AppInformations} />
           <Stack.Screen name="Revenue" component={CreateRevenueExpense} />
+          <Stack.Screen name="AddApp" component={AddNewApp} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

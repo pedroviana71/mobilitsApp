@@ -1,5 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {UserRegister} from '../types/user';
+import {UserRegister} from '../types/user.types';
 
 const initialState: UserRegister = {
   name: '',

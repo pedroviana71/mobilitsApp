@@ -13,14 +13,14 @@ interface DropdownProps {
   label: string;
   data: {name: string; id: number}[];
   onClickItem: (item: {name: string; id: number}) => void;
-  onClickAddItem: () => void;
+  onClickAddNewApp: () => void;
 }
 
 const Dropdown = ({
   label,
   data,
   onClickItem,
-  onClickAddItem,
+  onClickAddNewApp,
 }: DropdownProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<TouchableOpacity>(null);
@@ -36,7 +36,7 @@ const Dropdown = ({
   const handleClickItem = (item: {name: string; id: number}) => {
     setShowDropdown(false);
     if (item.name === 'Adicionar Item') {
-      onClickAddItem();
+      onClickAddNewApp();
       return;
     }
     onClickItem(item);

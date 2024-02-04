@@ -3,8 +3,14 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import FormRevenueExpense from './FormRevenueExpense';
 import AppButton from '../custom/Button';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
 
-const CreateRevenueExpense = () => {
+type CreateRevenueExpenseProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList>;
+};
+
+const CreateRevenueExpense = ({navigation}: CreateRevenueExpenseProps) => {
   const [isRevenue, setIsRevenue] = useState(true);
   const revenueSelected = 5;
   const notRevenueSelected = 2;
@@ -54,7 +60,7 @@ const CreateRevenueExpense = () => {
             fontWeight="600"
           />
         </View>
-        <FormRevenueExpense isRevenue={isRevenue} />
+        <FormRevenueExpense isRevenue={isRevenue} navigation={navigation} />
       </View>
     </View>
   );

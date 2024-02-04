@@ -5,7 +5,7 @@ import {
   UserLoginResponse,
   User,
   createUserResponse,
-} from '../types/user';
+} from '../types/user.types';
 import {api} from './api';
 
 const userApi = api.injectEndpoints({

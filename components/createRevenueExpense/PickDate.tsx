@@ -2,10 +2,10 @@ import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Calendar} from 'react-native-calendars';
-
+import {DateTime} from 'luxon';
 interface PickDateProps {
-  date: Date;
-  setDate: Dispatch<SetStateAction<Date>>;
+  date: DateTime;
+  setDate: Dispatch<SetStateAction<DateTime>>;
 }
 interface dateCalendar {
   dateString: string;
@@ -17,70 +17,65 @@ interface dateCalendar {
 
 const PickDate = ({date, setDate}: PickDateProps) => {
   const [showCalendar, setShowCalendar] = useState(false);
-  const [dateSelected, setDateSelected] = useState({
-    today: true,
-    yesterday: false,
-    anotherDate: false,
-  });
+  const today = DateTime.now();
+  console.log(date, 'date');
 
-  const handleDate = (dateInput: string) => {
-    if (dateInput === 'today') {
-      setDateSelected({today: true, yesterday: false, anotherDate: false});
-      setShowCalendar(false);
-    }
-    if (dateInput === 'yesterday') {
-      setDateSelected({today: false, yesterday: true, anotherDate: false});
-      setShowCalendar(false);
-    }
-    if (dateInput === 'anotherDate') {
-      setDateSelected({today: false, yesterday: false, anotherDate: true});
-      setShowCalendar(true);
-    }
-  };
-
-  const handleOnDayPress = (day: dateCalendar) => {
+  const handleOnDayPress = (date: dateCalendar) => {
+    setDate(() => DateTime.fromISO(date.dateString));
     setShowCalendar(false);
-    setDate(() => new Date(day.dateString));
   };
+
+  const handleChangeDate = (date: DateTime, showCalendar: boolean) => {
+    setDate(date);
+    setShowCalendar(showCalendar);
+  };
+
+  const isOtherDate =
+    date.toISODate() !== today.toISODate() &&
+    date.toISODate() !== today.minus({days: 1}).toISODate();
 
   return (
     <>
       <View style={styles.inputs}>
         <Icon name="calendar-month" style={styles.icon} />
-        <TouchableOpacity onPress={() => handleDate('today')}>
+        <TouchableOpacity onPress={() => handleChangeDate(today, false)}>
           <Text
             style={
-              dateSelected.today ? styles.dateSelected : styles.dateNotSelected
+              date.toISODate() === today.toISODate()
+                ? styles.dateSelected
+                : styles.dateNotSelected
             }>
             Hoje
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDate('yesterday')}>
+        <TouchableOpacity
+          onPress={() => handleChangeDate(today.minus({days: 1}), false)}>
           <Text
             style={
-              dateSelected.yesterday
+              date.toISODate() === today.minus({days: 1}).toISODate()
                 ? styles.dateSelected
                 : styles.dateNotSelected
             }>
             Ontem
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDate('anotherDate')}>
+        <TouchableOpacity
+          onPress={() => handleChangeDate(today.minus({days: 1000}), true)}>
           <Text
-            style={
-              dateSelected.anotherDate
-                ? styles.dateSelected
-                : styles.dateNotSelected
-            }>
-            {dateSelected.anotherDate && !showCalendar
-              ? date.toLocaleDateString('pt-BR', {timeZone: 'UTC'})
+            style={isOtherDate ? styles.dateSelected : styles.dateNotSelected}>
+            {isOtherDate && !showCalendar
+              ? date.toLocaleString()
               : 'Outra data'}
           </Text>
         </TouchableOpacity>
       </View>
 
       {showCalendar && (
-        <Calendar onDayPress={handleOnDayPress} hideDayNames={true} />
+        <Calendar
+          onDayPress={handleOnDayPress}
+          hideDayNames={true}
+          initialDate={today.toISODate()}
+        />
       )}
     </>
   );
@@ -112,7 +107,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    // zIndex: 2,
   },
 });
 export default PickDate;

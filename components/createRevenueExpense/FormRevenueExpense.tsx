@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -6,17 +6,44 @@ import AppButton from '../custom/Button';
 import PickDate from './PickDate';
 import Dropdown from '../custom/Dropdown';
 import {priceMask} from '../../utils/priceMask';
+import {useGetUserQuery} from '../../services/user';
+import * as Keychain from 'react-native-keychain';
+import {DateTime} from 'luxon';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../App';
 
 interface FormRevenueExpenseProps {
   isRevenue: boolean;
+  navigation: NativeStackNavigationProp<RootStackParamList>;
 }
 
-const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
+const FormRevenueExpense = ({
+  isRevenue,
+  navigation,
+}: FormRevenueExpenseProps) => {
   const [monetaryValue, setMonetaryValue] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [userId, setUserId] = useState('');
+  const [date, setDate] = useState(DateTime.now());
+  const [app, setApp] = useState('');
+  const [comments, setComments] = useState('');
+  const {data: user} = useGetUserQuery(userId);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const id = await Keychain.getInternetCredentials('userId');
+      setUserId(id ? id.password : '');
+    };
+    getUserId();
+  }, []);
 
   const handleMonetaryValue = (value: string) => {
     setMonetaryValue(priceMask(value));
+  };
+
+  const handleAddNewApp = () => {
+    console.log('teste');
+    console.log(navigation);
+    navigation.navigate('AddApp');
   };
 
   return (
@@ -41,7 +68,7 @@ const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
             <Dropdown
               label="Selecionar o app"
               onClickItem={() => {}}
-              onClickAddItem={() => {}}
+              onClickAddNewApp={handleAddNewApp} //! levar para uma tela de adicionar app a ser construida
               data={[]}
             />
           </View>
@@ -57,6 +84,8 @@ const FormRevenueExpense = ({isRevenue}: FormRevenueExpenseProps) => {
           <TextInput
             placeholder="Comentários (opcional)"
             style={styles.comments}
+            value={comments}
+            onChange={e => setComments(e.nativeEvent.text)}
           />
         </View>
       </View>
@@ -96,6 +125,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 0.5,
     borderBottomWidth: 0.5,
     borderTopWidth: 0.5,
-    fontSize: 16,
+    fontSize: 18,
   },
 });

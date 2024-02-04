@@ -6,7 +6,7 @@ import type {
 } from '@reduxjs/toolkit/query';
 import getTokens from '../utils/getTokens';
 import * as Keychain from 'react-native-keychain';
-import {createUserResponse} from '../types/user';
+import {createUserResponse} from '../types/user.types';
 import {resetTokens} from '../utils/resetTokens';
 
 type dataType = {
@@ -36,12 +36,6 @@ export const baseQueryWithReauth: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
   const tokens = await getTokens();
   const userId = await Keychain.getInternetCredentials('userId');
-  console.log(
-    'NEW TOKENS',
-    userId,
-    tokens && tokens?.accessToken,
-    result.error,
-  );
 
   if (
     tokens &&

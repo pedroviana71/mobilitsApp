@@ -19,6 +19,7 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
   const [isCarRented, setIsCarRented] = useState(false);
   const [isOwnCar, setIsOwnCar] = useState(false);
   const [rentPrice, setRentPrice] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (rentPrice !== '0' || isOwnCar) {
@@ -27,8 +28,6 @@ const CarInformations = ({navigation}: UserCredentialsProps) => {
       setCanSubmit(false);
     }
   }, [isOwnCar, rentPrice]);
-
-  const dispatch = useDispatch();
 
   const handleRentValue = (value: string) => {
     const number = parseFloat(value.replace(/[^\d]/g, ''));

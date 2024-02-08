@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AppButton from '../custom/Button';
@@ -11,6 +11,9 @@ import * as Keychain from 'react-native-keychain';
 import {DateTime} from 'luxon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../app/store';
+import {App} from '../../types/user.types';
 
 interface FormRevenueExpenseProps {
   isRevenue: boolean;
@@ -21,29 +24,26 @@ const FormRevenueExpense = ({
   isRevenue,
   navigation,
 }: FormRevenueExpenseProps) => {
-  const [monetaryValue, setMonetaryValue] = useState('');
-  const [userId, setUserId] = useState('');
-  const [date, setDate] = useState(DateTime.now());
-  const [app, setApp] = useState('');
+  const userId = useSelector((state: RootState) => state.user._id);
   const [comments, setComments] = useState('');
+  const [date, setDate] = useState(DateTime.now());
+  const [monetaryValue, setMonetaryValue] = useState('');
+  const [selectedApp, setSelectedApp] = useState({
+    name: '',
+    _id: '',
+  });
   const {data: user} = useGetUserQuery(userId);
-
-  useEffect(() => {
-    const getUserId = async () => {
-      const id = await Keychain.getInternetCredentials('userId');
-      setUserId(id ? id.password : '');
-    };
-    getUserId();
-  }, []);
 
   const handleMonetaryValue = (value: string) => {
     setMonetaryValue(priceMask(value));
   };
 
   const handleAddNewApp = () => {
-    console.log('teste');
-    console.log(navigation);
     navigation.navigate('AddApp');
+  };
+
+  const onClickItem = (item: App) => {
+    setSelectedApp(item);
   };
 
   return (
@@ -65,16 +65,27 @@ const FormRevenueExpense = ({
         {isRevenue ? (
           <View style={styles.inputs}>
             <Icon name="description" style={styles.icon} />
-            <Dropdown
-              label="Selecionar o app"
-              onClickItem={() => {}}
-              onClickAddNewApp={handleAddNewApp} //! levar para uma tela de adicionar app a ser construida
-              data={[]}
-            />
+            {selectedApp.name ? (
+              <View>
+                <Text>{selectedApp.name}</Text>
+                <Icon
+                  name="delete"
+                  style={styles.icon}
+                  onPress={() => setSelectedApp({name: '', _id: ''})}
+                />
+              </View>
+            ) : (
+              <Dropdown
+                label="Selecionar o app"
+                onClickItem={onClickItem}
+                onClickAddNewApp={handleAddNewApp} //! levar para uma tela de adicionar app a ser construida
+                data={user?.apps ?? []}
+              />
+            )}
           </View>
         ) : (
           <View style={styles.inputs}>
-            <Icon name="description" style={styles.icon} />
+            {selectedApp && <Icon name="description" style={styles.icon} />}
             <TextInput placeholder="Selecione a despesa" />
           </View>
         )}

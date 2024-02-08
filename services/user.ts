@@ -29,6 +29,7 @@ const userApi = api.injectEndpoints({
         url: `/auth/getUser/${id}`,
         method: 'GET',
       }),
+      providesTags: ['User'],
     }),
   }),
   overrideExisting: true,

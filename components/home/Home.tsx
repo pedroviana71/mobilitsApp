@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -7,13 +7,28 @@ import Earnings from './Earnings';
 import Goals from './Goals';
 import Footer from './Footer';
 import {useGetUserQuery} from '../../services/user';
+import * as Keychain from 'react-native-keychain';
+import {useDispatch} from 'react-redux';
+import {setUserId} from '../../features/userSlice';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 const Home = ({navigation}: HomeScreenProps) => {
-  const {data: user} = useGetUserQuery('65b63db63b9e8410c79d3790');
+  const [id, setId] = useState('');
+  const dispatch = useDispatch();
+  const {data: user} = useGetUserQuery(id);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const id = await Keychain.getInternetCredentials('userId');
+      const password = id ? id.password : '';
+      setId(password);
+      dispatch(setUserId(password));
+    };
+    getUserId();
+  }, []);
 
   return (
     <View style={styles.container}>

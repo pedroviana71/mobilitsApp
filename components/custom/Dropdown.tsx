@@ -11,8 +11,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface DropdownProps {
   label: string;
-  data: {name: string; id: number}[];
-  onClickItem: (item: {name: string; id: number}) => void;
+  data: {name: string; _id: string}[];
+  onClickItem: (item: {name: string; _id: string}) => void;
   onClickAddNewApp: () => void;
 }
 
@@ -23,8 +23,8 @@ const Dropdown = ({
   onClickAddNewApp,
 }: DropdownProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<TouchableOpacity>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
+  const dropdownRef = useRef<TouchableOpacity>(null);
 
   const handleShowDropdown = () => {
     dropdownRef.current?.measure((_fx, _fy, _w, h, _px, py) => {
@@ -33,7 +33,7 @@ const Dropdown = ({
     setShowDropdown(!showDropdown);
   };
 
-  const handleClickItem = (item: {name: string; id: number}) => {
+  const handleClickItem = (item: {name: string; _id: string}) => {
     setShowDropdown(false);
     if (item.name === 'Adicionar Item') {
       onClickAddNewApp();
@@ -63,7 +63,7 @@ const Dropdown = ({
                   left: 50,
                 },
               ]}
-              data={data.length > 0 ? data : [{name: 'Adicionar Item', id: 0}]}
+              data={[...data, {_id: '0', name: 'Adicionar Item'}]}
               renderItem={({item}) => (
                 <Text onPress={() => handleClickItem(item)} style={styles.text}>
                   {item.name}

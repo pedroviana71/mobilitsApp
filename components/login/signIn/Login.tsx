@@ -32,8 +32,6 @@ const Login = ({navigation}: UserCredentialsProps) => {
       return;
     }
 
-    console.log(response.data, 'response signin');
-
     const username = response.data.user.name;
 
     resetTokens();

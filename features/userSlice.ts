@@ -2,13 +2,14 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {UserRegister} from '../types/user.types';
 
 const initialState: UserRegister = {
+  _id: '',
   name: '',
   lastName: '',
   email: '',
   password: '',
   isCarRented: false,
   rentPrice: 0,
-  apps: [],
+  apps: [''],
 };
 
 export const userSlice = createSlice({
@@ -36,6 +37,9 @@ export const userSlice = createSlice({
     setUserApps: (state, action: PayloadAction<string[]>) => {
       state.apps = action.payload;
     },
+    setUserId: (state, action: PayloadAction<string>) => {
+      state._id = action.payload;
+    },
   },
 });
 
@@ -47,6 +51,7 @@ export const {
   setIsUserCarRented,
   setUserCarRentPrice,
   setUserApps,
+  setUserId,
 } = userSlice.actions;
 
 export default userSlice.reducer;

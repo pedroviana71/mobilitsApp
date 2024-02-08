@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import AppButton from '../custom/Button';
 import {useCreateAppMutation} from '../../services/transportationApp';
+import * as Keychain from 'react-native-keychain';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -27,14 +27,17 @@ const AddNewApp = ({navigation}: UserCredentialsProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!canSubmit) {
+    const userId = await Keychain.getInternetCredentials('userId');
+
+    if (!canSubmit || !userId) {
       return;
     }
-    const app = createApp({
-      userId: 'userId',
+
+    await createApp({
+      userId: userId.password,
       name: appList,
     });
-    console.log(app);
+
     navigation.goBack();
   };
 

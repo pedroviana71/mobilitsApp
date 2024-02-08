@@ -39,27 +39,29 @@ const AppInformations = ({navigation}: UserCredentialsProps) => {
     dispatch(setUserApps(appList));
 
     const data = await createUser(user);
+    console.log(data);
 
     if ('error' in data) {
       console.log(data.error);
-    } else {
-      await Keychain.setInternetCredentials(
-        'accessToken',
-        user.name,
-        data.data.tokens.accessToken,
-      );
-      await Keychain.setInternetCredentials(
-        'refreshToken',
-        user.name,
-        data.data.tokens.refreshToken,
-      );
-      await Keychain.setInternetCredentials(
-        'userId',
-        user.name,
-        data.data.user._id,
-      );
-      navigation.navigate('Home');
+      return;
     }
+
+    await Keychain.setInternetCredentials(
+      'accessToken',
+      user.name,
+      data.data.tokens.accessToken,
+    );
+    await Keychain.setInternetCredentials(
+      'refreshToken',
+      user.name,
+      data.data.tokens.refreshToken,
+    );
+    await Keychain.setInternetCredentials(
+      'userId',
+      user.name,
+      data.data.user._id,
+    );
+    navigation.navigate('Home');
   };
 
   const handleGoBack = () => {

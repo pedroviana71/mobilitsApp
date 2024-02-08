@@ -9,6 +9,7 @@ const appApi = api.injectEndpoints({
         method: 'POST',
         body: createApp,
       }),
+      invalidatesTags: ['User'],
     }),
   }),
   overrideExisting: true,

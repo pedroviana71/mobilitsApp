@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import FormRevenueExpense from './FormRevenueExpense';
+import FormRevenueExpense from './Form/FormRevenueExpense';
 import AppButton from '../custom/Button';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
@@ -35,7 +35,8 @@ const CreateRevenueExpense = ({navigation}: CreateRevenueExpenseProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, {backgroundColor: isRevenue ? green : red}]}>
       <Text style={styles.title}>
         {isRevenue ? 'Adicionar Receita' : 'Adicionar Despesa'}
       </Text>

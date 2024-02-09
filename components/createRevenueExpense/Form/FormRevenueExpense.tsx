@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import HorizontalSeparator from '../custom/HorizontalSeparator';
+import HorizontalSeparator from '../../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AppButton from '../custom/Button';
-import PickDate from './PickDate';
-import Dropdown from '../custom/Dropdown';
-import {priceMask} from '../../utils/priceMask';
-import {useGetUserQuery} from '../../services/user';
+import AppButton from '../../custom/Button';
+import PickDate from '../PickDate';
+import Dropdown from '../../custom/Dropdown';
+import {priceMask} from '../../../utils/priceMask';
+import {useGetUserQuery} from '../../../services/user';
 import * as Keychain from 'react-native-keychain';
 import {DateTime} from 'luxon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../App';
+import {RootStackParamList} from '../../../App';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../app/store';
-import {App} from '../../types/user.types';
+import {RootState} from '../../../app/store';
+import {App} from '../../../types/user.types';
+import SelectList from './SelectList';
 
 interface FormRevenueExpenseProps {
   isRevenue: boolean;
@@ -52,42 +53,47 @@ const FormRevenueExpense = ({
         <View style={styles.inputs}>
           <Icon name="attach-money" style={styles.icon} />
           <TextInput
-            placeholder="R$ 0,00"
-            style={styles.moneyInput}
+            placeholder="0,00"
+            placeholderTextColor={isRevenue ? '#5DB075' : '#EC5B5B'}
+            style={[
+              styles.moneyInput,
+              {color: isRevenue ? '#5DB075' : '#EC5B5B'},
+            ]}
             inputMode="numeric"
             onChangeText={handleMonetaryValue}
             value={monetaryValue.replace('.', ',')}
           />
         </View>
         <HorizontalSeparator />
-        <PickDate date={date} setDate={setDate} />
+        <PickDate
+          date={date}
+          setDate={setDate}
+          backgroundColor={isRevenue ? '#5DB075' : '#EC5B5B'}
+        />
         <HorizontalSeparator />
         {isRevenue ? (
-          <View style={styles.inputs}>
-            <Icon name="description" style={styles.icon} />
-            {selectedApp.name ? (
-              <View>
-                <Text>{selectedApp.name}</Text>
-                <Icon
-                  name="delete"
-                  style={styles.icon}
-                  onPress={() => setSelectedApp({name: '', _id: ''})}
-                />
-              </View>
-            ) : (
-              <Dropdown
-                label="Selecionar o app"
-                onClickItem={onClickItem}
-                onClickAddNewApp={handleAddNewApp} //! levar para uma tela de adicionar app a ser construida
-                data={user?.apps ?? []}
-              />
-            )}
-          </View>
+          <SelectList
+            selectedApp={selectedApp.name}
+            onClickItem={onClickItem}
+            handleAddNewApp={handleAddNewApp}
+            setSelectedApp={setSelectedApp}
+            label="Selecionar o app"
+            data={user?.apps ?? []}
+          />
         ) : (
-          <View style={styles.inputs}>
-            {selectedApp && <Icon name="description" style={styles.icon} />}
-            <TextInput placeholder="Selecione a despesa" />
-          </View>
+          <SelectList
+            selectedApp={selectedApp.name}
+            onClickItem={onClickItem}
+            handleAddNewApp={handleAddNewApp}
+            setSelectedApp={setSelectedApp}
+            label="Selecionar a despesa"
+            data={[
+              {
+                name: 'Gasolina',
+                _id: 'despesa',
+              },
+            ]}
+          />
         )}
         <HorizontalSeparator />
         <View style={styles.inputs}>
@@ -100,7 +106,13 @@ const FormRevenueExpense = ({
           />
         </View>
       </View>
-      <AppButton title="Salvar" onPress={() => {}} backgroundColor="green" />
+      <AppButton
+        title="Salvar"
+        onPress={() => {}}
+        backgroundColor="#3AA5D3"
+        fontWeight="600"
+        fontSize={18}
+      />
     </View>
   );
 };
@@ -123,7 +135,6 @@ const styles = StyleSheet.create({
   },
   moneyInput: {
     fontSize: 30,
-    color: '#4B9460',
   },
   comments: {
     padding: 8,

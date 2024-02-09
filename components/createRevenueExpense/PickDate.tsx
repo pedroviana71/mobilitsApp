@@ -6,6 +6,7 @@ import {DateTime} from 'luxon';
 interface PickDateProps {
   date: DateTime;
   setDate: Dispatch<SetStateAction<DateTime>>;
+  backgroundColor: string;
 }
 interface dateCalendar {
   dateString: string;
@@ -15,10 +16,11 @@ interface dateCalendar {
   year: number;
 }
 
-const PickDate = ({date, setDate}: PickDateProps) => {
-  const [showCalendar, setShowCalendar] = useState(false);
+const PickDate = ({date, setDate, backgroundColor}: PickDateProps) => {
   const today = DateTime.now();
-  console.log(date, 'date');
+  const yesterday = today.minus({days: 1}).toISODate();
+  const style = [styles.dateSelected, {backgroundColor}];
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const handleOnDayPress = (date: dateCalendar) => {
     setDate(() => DateTime.fromISO(date.dateString));
@@ -42,7 +44,7 @@ const PickDate = ({date, setDate}: PickDateProps) => {
           <Text
             style={
               date.toISODate() === today.toISODate()
-                ? styles.dateSelected
+                ? style
                 : styles.dateNotSelected
             }>
             Hoje
@@ -52,17 +54,14 @@ const PickDate = ({date, setDate}: PickDateProps) => {
           onPress={() => handleChangeDate(today.minus({days: 1}), false)}>
           <Text
             style={
-              date.toISODate() === today.minus({days: 1}).toISODate()
-                ? styles.dateSelected
-                : styles.dateNotSelected
+              date.toISODate() === yesterday ? style : styles.dateNotSelected
             }>
             Ontem
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleChangeDate(today.minus({days: 1000}), true)}>
-          <Text
-            style={isOtherDate ? styles.dateSelected : styles.dateNotSelected}>
+          <Text style={isOtherDate ? style : styles.dateNotSelected}>
             {isOtherDate && !showCalendar
               ? date.toLocaleString()
               : 'Outra data'}
@@ -90,7 +89,6 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   dateSelected: {
-    backgroundColor: '#5DB075',
     borderRadius: 8,
     marginHorizontal: 8,
     padding: 8,

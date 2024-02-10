@@ -5,6 +5,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import {setUserName, setUserLastName} from '../../../features/userSlice';
+import {nameLengthValidation} from '../../../utils/formValidations/nameLengthValidation';
+import InputAlert from '../../custom/InputAlert';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -14,6 +16,8 @@ const UserNames = ({navigation}: UserCredentialsProps) => {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [canSubmit, setCanSubmit] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLastNameValid, setIsLastNameValid] = useState(true);
 
   useEffect(() => {
     if (name && lastName) {
@@ -26,15 +30,30 @@ const UserNames = ({navigation}: UserCredentialsProps) => {
   const dispatch = useDispatch();
 
   const handleName = (userName: string) => {
+    setIsNameValid(true);
     setName(userName);
   };
 
   const handleLastName = (userLastName: string) => {
+    setIsLastNameValid(true);
     setLastName(userLastName);
   };
 
   const handleSubmit = () => {
+    const isName = nameLengthValidation(name);
+    const isLastName = nameLengthValidation(lastName);
+
     if (!name || !lastName) {
+      return;
+    }
+
+    if (!isName) {
+      setIsNameValid(false);
+      return;
+    }
+
+    if (!isLastName) {
+      setIsLastNameValid(false);
       return;
     }
 
@@ -59,6 +78,9 @@ const UserNames = ({navigation}: UserCredentialsProps) => {
               onChangeText={handleName}
               style={styles.input}
             />
+            {!isNameValid && (
+              <InputAlert text="Nome precisa no mínimo duas letras e no máximo 50 letras!" />
+            )}
           </View>
           <View>
             <Text style={styles.label}>Sobrenome</Text>
@@ -67,6 +89,9 @@ const UserNames = ({navigation}: UserCredentialsProps) => {
               onChangeText={handleLastName}
               style={styles.input}
             />
+            {!isLastNameValid && (
+              <InputAlert text="Sobrenome precisa no mínimo duas letras e no máximo 50 letras!" />
+            )}
           </View>
         </View>
       </View>

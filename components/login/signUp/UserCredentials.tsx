@@ -85,7 +85,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
         <View style={styles.inputsContainer}>
           <View>
             <Text style={styles.label}>Email</Text>
-            <View style={!passwordMatchs && styles.inputView}>
+            <View style={!isEmailValid && styles.inputView}>
               <TextInput
                 placeholder="Email"
                 onChangeText={handleEmail}

@@ -6,8 +6,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import InputAlert from '../../custom/InputAlert';
-import {emailValidation} from '../../../utils/emailValidation';
-import {passwordValidation} from '../../../utils/passwordValidation';
+import {emailValidation} from '../../../utils/formValidations/emailValidation';
+import {passwordValidation} from '../../../utils/formValidations/passwordValidation';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;

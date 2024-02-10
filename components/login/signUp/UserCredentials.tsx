@@ -5,6 +5,9 @@ import {setUserEmail, setUserPassword} from '../../../features/userSlice';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
+import InputAlert from '../../custom/InputAlert';
+import {emailValidation} from '../../../utils/emailValidation';
+import {passwordValidation} from '../../../utils/passwordValidation';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -15,6 +18,8 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordMatchs, setPasswordMatchs] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [canSubmit, setCanSubmit] = useState(false);
   const dispatch = useDispatch();
 
@@ -27,12 +32,14 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   }, [password, passwordConfirmation, email]);
 
   const handleEmail = (userEmail: string) => {
+    setIsEmailValid(true);
     setEmail(userEmail);
   };
 
   const handlePassword = (pwd: string) => {
-    setPasswordMatchs(true);
     setPassword(pwd);
+    setIsPasswordValid(true);
+    setPasswordMatchs(true);
   };
 
   const handlePasswordConfirmation = (confirmPwd: string) => {
@@ -41,6 +48,18 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   };
 
   const handleSubmit = () => {
+    const isEmail = emailValidation(email);
+    const passwordValid = passwordValidation(password);
+
+    if (!isEmail) {
+      setIsEmailValid(false);
+      return;
+    }
+    if (!passwordValid) {
+      setIsPasswordValid(false);
+      return;
+    }
+
     if (password !== passwordConfirmation) {
       setPasswordMatchs(false);
       return;
@@ -66,13 +85,17 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
         <View style={styles.inputsContainer}>
           <View>
             <Text style={styles.label}>Email</Text>
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleEmail}
-              value={email}
-              style={styles.input}
-              autoCapitalize="none"
-            />
+            <View style={!passwordMatchs && styles.inputView}>
+              <TextInput
+                placeholder="Email"
+                onChangeText={handleEmail}
+                value={email}
+                style={styles.input}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
+            {!isEmailValid && <InputAlert text="Email inválido" />}
           </View>
           <View>
             <Text style={styles.label}>Senha</Text>
@@ -100,7 +123,10 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
               />
             </View>
             {!passwordMatchs && (
-              <Text style={styles.passwordAlert}>As senhas não conferem</Text>
+              <InputAlert text="As senhas devem ser iguais" />
+            )}
+            {!isPasswordValid && (
+              <InputAlert text="A senha deve ter no mínimo 8 caracteres" />
             )}
           </View>
         </View>

@@ -63,12 +63,16 @@ const Login = ({navigation}: UserCredentialsProps) => {
           onChangeText={handleEmail}
           placeholder="Email"
           style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <TextInput
           value={password}
           onChangeText={handlePassword}
           placeholder="Senha"
           style={styles.input}
+          autoCapitalize="none"
+          secureTextEntry
         />
       </View>
       <View style={styles.buttonContainer}>

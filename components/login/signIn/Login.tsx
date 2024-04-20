@@ -65,6 +65,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
           style={styles.input}
           keyboardType="email-address"
           autoCapitalize="none"
+          placeholderTextColor="#BDBDBD"
         />
         <TextInput
           value={password}
@@ -73,6 +74,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
           style={styles.input}
           autoCapitalize="none"
           secureTextEntry
+          placeholderTextColor="#BDBDBD"
         />
       </View>
       <View style={styles.buttonContainer}>
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     paddingLeft: 8,
+    color: '#4B9460',
   },
   buttonContainer: {
     width: '100%',

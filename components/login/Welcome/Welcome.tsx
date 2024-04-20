@@ -45,6 +45,8 @@ const Welcome = ({navigation}: WelcomeScreenProps) => {
           onPress={() => navigation.navigate('UserCredentials')}
           title="Criar Conta"
           backgroundColor="#F6F6F6"
+          textColor="#5DB075"
+          fontWeight="bold"
         />
       </View>
     </View>
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: '#5DB075',
   },
   buttonContainer: {
     width: '100%',

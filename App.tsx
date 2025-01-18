@@ -12,10 +12,12 @@ import CarInformartions from './components/login/signUp/CarInformartions';
 import Login from './components/login/signIn/Login';
 import CreateRevenueExpense from './components/createRevenueExpense/CreateRevenueExpense';
 import AddNewApp from './components/profile/AddNewApp';
+import RecommendRegistration from './components/login/Welcome/RecommendRegistration';
 
 export type RootStackParamList = {
   Home: undefined;
   Welcome: undefined;
+  RecommendRegistration: undefined;
   UserNames: undefined;
   AppInformations: undefined;
   CarInformations: undefined;
@@ -35,6 +37,7 @@ function App(): JSX.Element {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="RecommendRegistration" component={RecommendRegistration} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UserCredentials" component={UserCredentials} />
           <Stack.Screen name="UserNames" component={UserNames} />

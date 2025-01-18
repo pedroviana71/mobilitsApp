@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.mobilits"
+    namespace "com.mibens"
     defaultConfig {
-        applicationId "com.mobilits"
+        applicationId "com.mibens"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

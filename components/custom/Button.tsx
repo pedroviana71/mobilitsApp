@@ -1,12 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {COLORS} from '../../utils/theme';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  backgroundColor: string;
+  backgroundColor?: string;
   textColor?: string;
-  fontWeight?: 'bold' | 'normal' | '300' | '600' | '900';
+  fontWeight?: 'bold' | 'normal' | '300' | '400' | '500' | '600' | '900';
   width?: string;
   elevation?: number;
   shadowColor?: string;
@@ -25,32 +26,33 @@ const AppButton = ({
   fontSize,
 }: ButtonProps) => {
   const fontSizeNumber = fontSize ? fontSize : 16;
-
+  
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.container,
-        {backgroundColor, width, elevation, shadowColor},
-      ]}>
-      <Text
-        style={[
-          styles.text,
-          {color: textColor, fontWeight, fontSize: fontSizeNumber},
-        ]}>
-        {title}
-      </Text>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[
+      styles.container,
+      {backgroundColor, width, elevation, shadowColor},
+    ]}>
+      <View>
+        <Text
+          style={[
+            styles.text,
+            {color: textColor, fontWeight, fontSize: fontSizeNumber},
+          ]}>
+          {title}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 100,
+    borderRadius: 15,
   },
   text: {
     textAlign: 'center',
     marginVertical: 16,
+    fontFamily: 'NotoSansMedium',
   },
 });
 

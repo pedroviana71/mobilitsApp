@@ -1,4 +1,4 @@
-package com.mobilits;
+package com.mibens;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

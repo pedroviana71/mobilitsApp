@@ -12,6 +12,10 @@
     {
       "path": "assets/fonts/NotoSansRegular.ttf",
       "sha1": "f04a504e2078d6c01b3bf453c0d18c4f77c2133b"
+    },
+    {
+      "path": "assets/fonts/NotoSansSemiBold.ttf",
+      "sha1": "ab4e235f3ca95a23a141d9da371142939ba3c848"
     }
   ]
 }

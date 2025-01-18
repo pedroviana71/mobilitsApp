@@ -1,6 +1,7 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, View, Image, StatusBar, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import {COLORS} from '../../../utils/theme';
@@ -13,24 +14,26 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#00E06102" />
-      <View>
+      <View style={styles.bannerContainer}>
+        <View style={styles.hashtagContainer}>
+          <Text style={styles.hashtagTitle}>#Crie</Text>
+          <Text style={styles.hashtagText}>sua CONTA e tenha</Text>
+        </View>
         <Image
           source={require('../../../assets/RecommendRegistration.png')}
-          style={styles.logo}
+          style={styles.fingerprint}
         />
-        <View>
-          <Text>#Crie</Text>
-          <Text>sua CONTA e tenha</Text>
-        </View>
-        <View>
-          <View>
-            <Text> Tenha seus dados salvos</Text>
+        <View style={styles.infoContainer}>
+          <View style={styles.info}>
+            <Icon name='key' style={styles.infoIcon}/>
+            <Text style={styles.infoText}>Sua saúde financeira salva na nuvem</Text>
           </View>
-          <View>
-            <Text> Recupere sua conta</Text>
+          <View style={styles.info}>
+          <Icon name='pocket' style={styles.infoIcon}/>
+            <Text style={styles.infoText}>Recuperação de conta quando quiser</Text>
           </View>
         </View>
-        <Text>
+        <Text style={styles.legend}>
           Com uma conta vocẽ consegue salvar seus dados e recuperar sua conta
           caso você perca acesso ao seu dispositivo.
         </Text>
@@ -63,8 +66,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#00E06102',
     padding: 16,
+    fontFamily: 'NotoSansMedium',
   },
-  logo: {
+  bannerContainer: {
+    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  hashtagContainer: {
+    marginLeft: 32,
+  },
+  hashtagTitle: {
+    fontFamily: 'NotoSansSemiBold',
+    fontSize: 32,
+    color: COLORS.black80,
+  },
+  hashtagText: {
+    fontFamily: 'NotoSansSemiBold',
+    fontSize: 32,
+    color: COLORS.black60,
+    paddingLeft: 32,
+  },
+  infoContainer: {
+    backgroundColor: COLORS.white,
+    gap: 16,
+    padding: 16,
+    borderRadius: 15,
+    elevation: 15,
+    shadowColor: COLORS.black20,
+  },
+  info: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  infoText: {
+    fontFamily: 'NotoSansMedium',
+    fontSize: 16,
+    color: COLORS.black60,
+  },
+  infoIcon: {
+    fontSize: 24,
+    color: COLORS.green,
+  },
+  fingerprint: {
     alignSelf: 'center',
     width: 320,
     resizeMode: 'contain',
@@ -79,6 +124,14 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 8,
   },
+  legend: {
+    fontFamily: 'NotoSansLight',
+    fontSize: 12,
+    color: COLORS.black80,
+    textAlign: 'center',
+    marginTop: 32,
+    paddingHorizontal: 48,
+  }
 });
 
 export default RecommendRegistration;

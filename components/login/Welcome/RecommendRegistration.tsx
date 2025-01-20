@@ -5,12 +5,23 @@ import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import {COLORS} from '../../../utils/theme';
+import { useCreateAnonymousUserMutation } from '../../../services/user';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
 };
 
 const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
+  const [createAnonymousUser] = useCreateAnonymousUserMutation();
+
+
+  const handleAnonymousUserLogin = async () => {
+    const user = await createAnonymousUser();
+    console.log(user);
+    
+    return user;
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#00E06102" />
@@ -38,7 +49,7 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
           caso você perca acesso ao seu dispositivo.
         </Text>
       </View>
-      <View style={styles.loginButtonContainer}>
+      <View style={styles.buttonContainer}>
         <AppButton
           onPress={() => navigation.navigate('UserCredentials')}
           title="Quero criar uma conta nova"
@@ -49,7 +60,7 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
           shadowColor={COLORS.black60}
         />
         <AppButton
-          onPress={() => {}}
+          onPress={() => handleAnonymousUserLogin()}
           title="Entrar sem registrar mesmo assim"
           textColor={COLORS.black60}
           fontWeight="500"
@@ -114,16 +125,6 @@ const styles = StyleSheet.create({
     width: 320,
     resizeMode: 'contain',
   },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#5DB075',
-  },
-  loginButtonContainer: {
-    width: '100%',
-    gap: 8,
-  },
   legend: {
     fontFamily: 'NotoSansLight',
     fontSize: 12,
@@ -131,7 +132,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 32,
     paddingHorizontal: 48,
-  }
+  },
+  buttonContainer: {
+    width: '100%',
+    gap: 8,
+  },
 });
 
 export default RecommendRegistration;

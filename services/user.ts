@@ -24,6 +24,13 @@ const userApi = api.injectEndpoints({
         body: createUser,
       }),
     }),
+    createAnonymousUser: build.mutation<createUserResponse, void>({
+      query: () => ({
+        url: '/auth/createAnonymousUser',
+        method: 'POST',
+        body: {isAnonimous: true},
+      }),
+    }),
     getUser: build.query<User, string>({
       query: id => ({
         url: `/auth/getUser/${id}`,
@@ -35,5 +42,5 @@ const userApi = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const {useLoginMutation, useCreateUserMutation, useGetUserQuery} =
+export const {useLoginMutation, useCreateUserMutation, useGetUserQuery, useCreateAnonymousUserMutation} =
   userApi;

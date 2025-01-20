@@ -8,6 +8,9 @@ import AppButton from '../../custom/Button';
 import InputAlert from '../../custom/InputAlert';
 import {emailValidation} from '../../../utils/formValidations/emailValidation';
 import {passwordValidation} from '../../../utils/formValidations/passwordValidation';
+import {COLORS} from '../../../utils/theme';
+import {useCreateUserMutation} from '../../../services/user';
+import * as Keychain from 'react-native-keychain';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -15,21 +18,24 @@ type UserCredentialsProps = {
 
 const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [passwordMatchs, setPasswordMatchs] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isNameValid, setIsNameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [canSubmit, setCanSubmit] = useState(false);
   const dispatch = useDispatch();
+  const [createUser] = useCreateUserMutation();
 
   useEffect(() => {
-    if (password && passwordConfirmation && email) {
+    if (password && passwordConfirmation && email && name) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
     }
-  }, [password, passwordConfirmation, email]);
+  }, [password, passwordConfirmation, email, name]);
 
   const handleEmail = (userEmail: string) => {
     setIsEmailValid(true);
@@ -42,40 +48,70 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
     setPasswordMatchs(true);
   };
 
+  const handleName = (userName: string) => {
+    setIsNameValid(true);
+    setName(userName);
+  };
+
   const handlePasswordConfirmation = (confirmPwd: string) => {
     setPasswordMatchs(true);
     setPasswordConfirmation(confirmPwd);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const isEmail = emailValidation(email);
-    const passwordValid = passwordValidation(password);
+    const passwordValid = passwordValidation(password, passwordConfirmation);
 
     if (!isEmail) {
       setIsEmailValid(false);
-      return;
     }
     if (!passwordValid) {
       setIsPasswordValid(false);
-      return;
     }
 
-    if (password !== passwordConfirmation) {
-      setPasswordMatchs(false);
-      return;
+    if (name.length < 2) {
+      setIsNameValid(false);
     }
 
     if (!canSubmit) {
       return;
     }
 
-    dispatch(setUserEmail(email));
-    dispatch(setUserPassword(password));
-    navigation.navigate('UserNames');
+    const user = {
+      name,
+      email,
+      password,
+    };
+
+    const userCreated = await createUser(user);
+    console.log(userCreated);
+
+    if ('error' in userCreated) {
+      console.log(userCreated.error);
+      return;
+    }
+
+    await Keychain.setInternetCredentials(
+      'accessToken',
+      user.name,
+      userCreated.data.tokens.accessToken,
+    );
+    await Keychain.setInternetCredentials(
+      'refreshToken',
+      user.name,
+      userCreated.data.tokens.refreshToken,
+    );
+    await Keychain.setInternetCredentials(
+      'userId',
+      user.name,
+      userCreated.data.user._id,
+    );
+
+    navigation.replace('Home');
   };
 
-  const handleGoBack = () => {
-    navigation.goBack();
+  const handleSendUserLogin = () => {
+    navigation.navigate('Login');
   };
 
   return (
@@ -83,6 +119,23 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
       <View>
         <Text style={styles.title}>Criar conta</Text>
         <View style={styles.inputsContainer}>
+          <View>
+            <Text style={styles.label}>Nome</Text>
+            <View style={!isNameValid && styles.inputView}>
+              <TextInput
+                placeholder="Nome"
+                onChangeText={handleName}
+                value={name}
+                style={styles.input}
+                autoCapitalize="words"
+                keyboardType="default"
+                placeholderTextColor={COLORS.black60}
+              />
+            </View>
+            {!isNameValid && (
+              <InputAlert text="Nome precisa ser maior que 2 caracteres." />
+            )}
+          </View>
           <View>
             <Text style={styles.label}>Email</Text>
             <View style={!isEmailValid && styles.inputView}>
@@ -93,6 +146,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
                 style={styles.input}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                placeholderTextColor={COLORS.black60}
               />
             </View>
             {!isEmailValid && <InputAlert text="Email inválido" />}
@@ -107,6 +161,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
                 style={styles.input}
                 secureTextEntry
                 autoCapitalize="none"
+                placeholderTextColor={COLORS.black60}
               />
             </View>
           </View>
@@ -120,6 +175,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
                 style={styles.input}
                 secureTextEntry
                 autoCapitalize="none"
+                placeholderTextColor={COLORS.black60}
               />
             </View>
             {!passwordMatchs && (
@@ -135,15 +191,16 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
         <AppButton
           onPress={handleSubmit}
           title="Próximo"
-          backgroundColor={canSubmit ? '#5DB075' : '#90C59F'}
-          textColor="#E9ECED"
+          backgroundColor={canSubmit ? COLORS.green : COLORS.green20}
+          textColor={canSubmit ? COLORS.black80 : COLORS.black60}
+          elevation={10}
+          shadowColor={COLORS.black20}
         />
         <AppButton
-          onPress={handleGoBack}
+          onPress={handleSendUserLogin}
           title="Entrar na conta"
           backgroundColor="transparent"
-          textColor="#5DB075"
-          fontWeight="600"
+          textColor={COLORS.black60}
         />
       </View>
     </View>
@@ -157,17 +214,19 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
-    backgroundColor: '#E9ECED',
+    backgroundColor: COLORS.background,
     justifyContent: 'space-between',
   },
   title: {
     fontSize: 30,
     fontWeight: '600',
-    color: '#4B9460',
-    marginBottom: 32,
+    color: COLORS.black80,
+    marginBottom: 16,
+    fontFamily: 'NotoSansRegular',
   },
   inputsContainer: {
-    gap: 16,
+    paddingVertical: 32,
+    gap: 24,
   },
   inputView: {
     borderWidth: 1,
@@ -176,9 +235,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#666666',
-    marginBottom: 8,
+    color: COLORS.black80,
+    marginBottom: 4,
+    fontFamily: 'NotoSansRegular',
   },
   passwordAlert: {
     color: '#EC5B5B',
@@ -187,9 +246,15 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   input: {
-    backgroundColor: '#F6F6F6',
-    borderRadius: 8,
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
+    borderColor: COLORS.black20,
+    borderStyle: 'solid',
+    borderWidth: 0.5,
     paddingLeft: 8,
+    elevation: 6,
+    shadowColor: COLORS.black20,
+    fontFamily: 'NotoSansLight',
   },
   buttonContainer: {
     width: '100%',

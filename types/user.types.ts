@@ -1,36 +1,24 @@
 export interface User {
   _id: string;
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-  apps: App[];
-  isCarRented: boolean;
-  rentPrice?: number;
+  name: string | null;
+  email: string | null;
+  password: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface App {
-  _id: string;
-  name: string;
-}
 
 export interface UserLogin {
-  email: string;
-  password: string;
+  email: string | null;
+  password: string | null;
 }
 
 export interface UserRegister extends UserLogin {
   _id: string;
-  name: string;
-  lastName: string;
-  isCarRented: boolean;
-  rentPrice?: number;
-  apps: string[];
+  name: string | null;
 }
 export interface createUserResponse {
-  user: {_id: string; name: string};
+  user: {_id: string; name?: string};
   tokens: Tokens;
 }
 

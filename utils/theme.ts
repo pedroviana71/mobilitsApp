@@ -1,11 +1,12 @@
 export const COLORS = {
     green: '#30E17D',
+    green20: '#C9FADE',
+    green80: '#00E06180',
     blue: '#00C9E0',
     white: '#FDFFFE',
-    green80: '#00E06180',
     black80: '#0C2917',
-    black60: '#000A0460',
-    black20: '#000A0420',
+    black60: '#696C6A',
+    black20: '#CBCBCB',
     background: '#00E06102',
     text: '#333333',
 };

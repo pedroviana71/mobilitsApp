@@ -32,7 +32,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
       return;
     }
 
-    const username = response.data.user.name;
+    const username = response.data.user.name!;
 
     resetTokens();
 
@@ -51,7 +51,8 @@ const Login = ({navigation}: UserCredentialsProps) => {
       username,
       response.data.tokens.refreshToken,
     );
-    navigation.navigate('Home');
+
+    navigation.reset({index: 0, routes: [{name: 'Home'}]});
   };
 
   return (

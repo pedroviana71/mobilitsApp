@@ -1,24 +1,33 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../App';
+import { COLORS } from '../../utils/theme';
+import { useRoute } from '@react-navigation/native';
 type FooterProps = {
-  navigate: NativeStackNavigationProp<RootStackParamList>['navigate'];
+  navigation: NativeStackNavigationProp<RootStackParamList>['navigate'];
 };
 
-const Footer = ({navigate}: FooterProps) => {
-  const handleCreateRevenue = () => {
-    navigate('Revenue');
+const Footer = ({navigation}: FooterProps) => {
+  const handleNavigationRevenue = () => {
+    navigation('Revenue');
   };
+
+  const route = useRoute();
+
+  useEffect(() => {
+    console.log(route.name);
+  }, [route]);
+
 
   return (
     <View style={styles.container}>
       <Icon style={styles.icon} name="home" />
       <Icon style={styles.icon} name="bar-chart" />
-      <Icon style={styles.addIcon} name="add" onPress={handleCreateRevenue} />
-      <Icon style={styles.icon} name="bookmark-add" />
-      <Icon style={styles.icon} name="settings" />
+      <Icon style={styles.addIcon} name="plus" onPress={handleNavigationRevenue} />
+      <Icon style={styles.icon} name="pie-chart" />
+      <Icon style={styles.icon} name="user" />
     </View>
   );
 };
@@ -30,23 +39,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     paddingTop: 8,
-    position: 'absolute',
+    paddingBottom: 12,
+    bottom: 0,
     width: '100%',
-    bottom: -16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF', 
+
   },
   icon: {
-    fontSize: 32,
-    color: '#000000',
+    fontSize: 24,
+    padding: 8,
+    color: COLORS.black80,
   },
   addIcon: {
-    top: -30,
-    backgroundColor: '#4B9460',
-    fontSize: 30,
-    color: '#FFFFFF',
+    backgroundColor: COLORS.green,
+    fontSize: 24,
+    padding: 8,
+    color: COLORS.black80,
     borderRadius: 100,
-    padding: 16,
-    shadowColor: '#000000',
-    elevation: 3,
+    shadowColor: COLORS.black80,
+    elevation: 15,
   },
 });

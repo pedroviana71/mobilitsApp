@@ -1,24 +1,24 @@
 export interface User {
   _id: string;
-  name: string | null;
-  email: string | null;
-  password: string | null;
+  name: string;
+  email: string ;
+  password: string;
   createdAt: string;
   updatedAt: string;
 }
 
 
 export interface UserLogin {
-  email: string | null;
-  password: string | null;
+  email: string;
+  password: string;
 }
 
 export interface UserRegister extends UserLogin {
   _id: string;
   name: string | null;
 }
-export interface createUserResponse {
-  user: {_id: string; name?: string};
+export interface CreateUserResponse {
+  user: {_id: string; name: string};
   tokens: Tokens;
 }
 
@@ -27,7 +27,7 @@ export interface Tokens {
   refreshToken: string;
 }
 
-export interface UserLoginResponse {
+export interface LoginResponse {
   user: Pick<User, 'name' | '_id'>;
   tokens: Tokens;
 }

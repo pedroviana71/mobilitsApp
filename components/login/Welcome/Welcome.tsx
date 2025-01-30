@@ -13,7 +13,7 @@ type WelcomeScreenProps = {
 const Welcome = ({navigation}: WelcomeScreenProps) => {
   useEffect(() => {
     const checkUser = async () => {
-      const tokens = await getTokens();
+      const tokens = await getTokens();      
       return tokens;
     };
 

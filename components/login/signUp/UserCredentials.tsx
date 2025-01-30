@@ -9,7 +9,10 @@ import InputAlert from '../../custom/InputAlert';
 import {emailValidation} from '../../../utils/formValidations/emailValidation';
 import {passwordValidation} from '../../../utils/formValidations/passwordValidation';
 import {COLORS} from '../../../utils/theme';
-import {useCreateUserMutation} from '../../../services/user';
+import {
+  useCreateAnonymousUserMutation,
+  useCreateUserMutation,
+} from '../../../services/user';
 import * as Keychain from 'react-native-keychain';
 
 type UserCredentialsProps = {
@@ -81,10 +84,10 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
       name,
       email,
       password,
+      isAnonymous: false,
     };
 
     const userCreated = await createUser(user);
-    console.log(userCreated);
 
     if ('error' in userCreated) {
       console.log(userCreated.error);
@@ -107,7 +110,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
       userCreated.data.user._id,
     );
 
-    navigation.replace('Home');
+    navigation.reset({index: 0, routes: [{name: 'Home'}]});
   };
 
   const handleSendUserLogin = () => {

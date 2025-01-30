@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import {COLORS} from '../../../utils/theme';
-import { useCreateAnonymousUserMutation } from '../../../services/user';
+import {useCreateAnonymousUserMutation} from '../../../services/user';
+import * as Keychain from 'react-native-keychain';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
@@ -14,12 +15,32 @@ type WelcomeScreenProps = {
 const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
   const [createAnonymousUser] = useCreateAnonymousUserMutation();
 
-
   const handleAnonymousUserLogin = async () => {
-    const user = await createAnonymousUser();
-    console.log(user);
-    
-    return user;
+    const userCreated = await createAnonymousUser();
+    console.log(userCreated);    
+
+    if ('error' in userCreated) {
+      console.log(userCreated.error);
+      return;
+    }
+
+    await Keychain.setInternetCredentials(
+      'accessToken',
+      'Anonymous',
+      userCreated.data.tokens.accessToken,
+    );
+    await Keychain.setInternetCredentials(
+      'refreshToken',
+      'Anonymous',
+      userCreated.data.tokens.refreshToken,
+    );
+    await Keychain.setInternetCredentials(
+      'userId',
+      'Anonymous',
+      userCreated.data.user._id,
+    );
+
+    navigation.reset({index: 0, routes: [{name: 'Home'}]});
   };
 
   return (
@@ -36,12 +57,16 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
         />
         <View style={styles.infoContainer}>
           <View style={styles.info}>
-            <Icon name='key' style={styles.infoIcon}/>
-            <Text style={styles.infoText}>Sua saúde financeira salva na nuvem</Text>
+            <Icon name="key" style={styles.infoIcon} />
+            <Text style={styles.infoText}>
+              Sua saúde financeira salva na nuvem
+            </Text>
           </View>
           <View style={styles.info}>
-          <Icon name='pocket' style={styles.infoIcon}/>
-            <Text style={styles.infoText}>Recuperação de conta quando quiser</Text>
+            <Icon name="pocket" style={styles.infoIcon} />
+            <Text style={styles.infoText}>
+              Recuperação de conta quando quiser
+            </Text>
           </View>
         </View>
         <Text style={styles.legend}>

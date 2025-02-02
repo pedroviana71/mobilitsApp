@@ -1,10 +1,10 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
-import { StyleSheet, View, Image, StatusBar} from 'react-native';
+import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import getTokens from '../../../utils/getTokens';
-import { COLORS } from '../../../utils/theme';
+import {COLORS} from '../../../utils/theme';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
@@ -13,16 +13,15 @@ type WelcomeScreenProps = {
 const Welcome = ({navigation}: WelcomeScreenProps) => {
   useEffect(() => {
     const checkUser = async () => {
-      const tokens = await getTokens();      
+      const tokens = await getTokens();
       return tokens;
     };
 
     checkUser().then(user => {
       if (user) {
-        navigation.navigate('Home');
+        navigation.reset({index: 0, routes: [{name: 'Home'}]});
       }
     });
-
   }, [navigation]);
 
   return (
@@ -40,7 +39,7 @@ const Welcome = ({navigation}: WelcomeScreenProps) => {
           title="Entrar"
           backgroundColor={COLORS.green}
           textColor={COLORS.black80}
-          fontWeight='500'
+          fontWeight="500"
           elevation={10}
           shadowColor={COLORS.black60}
         />

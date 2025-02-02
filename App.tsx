@@ -7,7 +7,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Welcome from './components/login/Welcome/Welcome';
 import UserCredentials from './components/login/signUp/UserCredentials';
 import Login from './components/login/signIn/Login';
-import CreateRevenueExpense from './components/createRevenueExpense/CreateRevenueExpense';
+import Transactions from './components/createRevenueExpense/Transactions';
 import AddNewApp from './components/profile/AddNewApp';
 import RecommendRegistration from './components/login/Welcome/RecommendRegistration';
 
@@ -17,7 +17,7 @@ export type RootStackParamList = {
   RecommendRegistration: undefined;
   UserCredentials: undefined;
   Login: undefined;
-  Revenue: undefined;
+  Transactions: undefined;
   AddApp: undefined;
 };
 
@@ -31,10 +31,13 @@ function App(): JSX.Element {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen name="RecommendRegistration" component={RecommendRegistration} />
+          <Stack.Screen
+            name="RecommendRegistration"
+            component={RecommendRegistration}
+          />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="UserCredentials" component={UserCredentials} />
-          <Stack.Screen name="Revenue" component={CreateRevenueExpense} />
+          <Stack.Screen name="Transactions" component={Transactions} />
           <Stack.Screen name="AddApp" component={AddNewApp} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -4,7 +4,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {COLORS, FONTS} from '../../utils/theme';
 import Icon from 'react-native-vector-icons/Feather';
-import BottomSheet from '../custom/BottomSheet';
 
 type TransactionsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -27,9 +26,6 @@ const Transactions = ({navigation}: TransactionsProps) => {
       </View>
       <View style={styles.inputsContainer}>
         {/* <FormRevenueExpense isRevenue={isRevenue} navigation={navigation} /> */}
-        <BottomSheet>
-          <Text>BottomSheet</Text>
-        </BottomSheet>
       </View>
     </View>
   );

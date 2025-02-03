@@ -1,18 +1,21 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../App';
 import {COLORS} from '../../utils/theme';
 import {useRoute} from '@react-navigation/native';
-import AppButton from '../custom/Button';
+import {BottomSheet} from '../custom/BottomSheet';
 type FooterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>['navigate'];
 };
 
 const Footer = ({navigation}: FooterProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleNavigationRevenue = () => {
-    navigation('Transactions');
+    // navigation('Transactions');
+    setIsOpen(true);
   };
 
   const route = useRoute();
@@ -20,6 +23,10 @@ const Footer = ({navigation}: FooterProps) => {
   useEffect(() => {
     console.log(route.name);
   }, [route]);
+
+  function toggleSheet() {
+    setIsOpen(prevState => !prevState);
+  }
 
   return (
     <View>
@@ -34,25 +41,7 @@ const Footer = ({navigation}: FooterProps) => {
         <Icon style={styles.icon} name="pie-chart" />
         <Icon style={styles.icon} name="user" />
       </View>
-      <View>
-        <View>
-          <AppButton
-            onPress={() => {}}
-            title="Transactions"
-            backgroundColor={COLORS.green}
-          />
-          <AppButton
-            onPress={() => {}}
-            title="Transactions"
-            backgroundColor={COLORS.blue}
-          />
-          <AppButton
-            onPress={() => {}}
-            title="Transactions"
-            backgroundColor={COLORS.black60}
-          />
-        </View>
-      </View>
+      <View>{isOpen && <BottomSheet onClose={toggleSheet} />}</View>
     </View>
   );
 };

@@ -9,7 +9,10 @@ import {useCreateAnonymousUserMutation} from '../../../services/user';
 import * as Keychain from 'react-native-keychain';
 
 type WelcomeScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'RecommendRegistration'
+  >;
 };
 
 const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
@@ -17,7 +20,7 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
 
   const handleAnonymousUserLogin = async () => {
     const userCreated = await createAnonymousUser();
-    console.log(userCreated);    
+    console.log(userCreated);
 
     if ('error' in userCreated) {
       console.log(userCreated.error);

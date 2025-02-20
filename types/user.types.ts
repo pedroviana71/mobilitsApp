@@ -1,19 +1,18 @@
 export interface User {
   _id: string;
   name: string;
-  email: string ;
+  email: string;
   password: string;
   createdAt: string;
   updatedAt: string;
 }
-
 
 export interface UserLogin {
   email: string;
   password: string;
 }
 
-export interface UserRegister extends UserLogin {
+export interface UserRegister {
   _id: string;
   name: string | null;
 }

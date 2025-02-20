@@ -4,9 +4,9 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
-import getTokens from '../utils/getTokens';
+import getTokensAndUserId from '../utils/getTokens';
 import * as Keychain from 'react-native-keychain';
-import {createUserResponse} from '../types/user.types';
+import {CreateUserResponse} from '../types/user.types';
 import {resetTokens} from '../utils/resetTokens';
 
 type dataType = {
@@ -20,7 +20,7 @@ const baseQuery = fetchBaseQuery({
   // baseUrl: 'http://192.168.15.1:3000/', // ip do modem de minas
   credentials: 'include',
   prepareHeaders: async headers => {
-    const tokens = await getTokens();
+    const tokens = await getTokensAndUserId();
     if (tokens) {
       headers.set('authorization', `Bearer ${tokens.accessToken}`);
     }
@@ -34,7 +34,7 @@ export const baseQueryWithReauth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
-  const tokens = await getTokens();
+  const tokens = await getTokensAndUserId();
   const userId = await Keychain.getInternetCredentials('userId');
 
   if (
@@ -57,7 +57,7 @@ export const baseQueryWithReauth: BaseQueryFn<
       extraOptions,
     );
     if (refreshResult.data) {
-      const newTokens = (refreshResult.data as createUserResponse).tokens;
+      const newTokens = (refreshResult.data as CreateUserResponse).tokens;
 
       resetTokens();
 

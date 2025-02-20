@@ -13,7 +13,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../app/store';
-import {App} from '../../../types/user.types';
 import SelectList from './SelectList';
 
 interface FormRevenueExpenseProps {
@@ -43,7 +42,7 @@ const FormRevenueExpense = ({
     navigation.navigate('AddApp');
   };
 
-  const onClickItem = (item: App) => {
+  const onClickItem = (item: any) => {
     setSelectedApp(item);
   };
 
@@ -78,7 +77,7 @@ const FormRevenueExpense = ({
             handleAddNewApp={handleAddNewApp}
             setSelectedApp={setSelectedApp}
             label="Selecionar o app"
-            data={user?.apps ?? []}
+            data={[]}
           />
         ) : (
           <SelectList

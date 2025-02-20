@@ -8,7 +8,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {resetTokens} from '../../../utils/resetTokens';
 
 type UserCredentialsProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
 };
 
 const Login = ({navigation}: UserCredentialsProps) => {

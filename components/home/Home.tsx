@@ -1,51 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Feather';
 import Balance from './Balance';
 import Goals from './Goals';
-import Footer from './Footer';
+import Footer from '../custom/Footer';
 import {useGetUserQuery} from '../../services/user';
 import * as Keychain from 'react-native-keychain';
-import {useDispatch} from 'react-redux';
-import {setUserId} from '../../features/userSlice';
 import {COLORS, FONTS} from '../../utils/theme';
 import RecentTransactions from './RecentTransactions';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../app/store';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 const Home = ({navigation}: HomeScreenProps) => {
-  const [id, setId] = useState('');
-  const dispatch = useDispatch();
-  const {data: user} = useGetUserQuery(id);
-
-  useEffect(() => {
-    const getUserId = async () => {
-      const id = await Keychain.getInternetCredentials('userId');
-      const password = id ? id.password : '';
-      setId(password);
-      dispatch(setUserId(password));
-    };
-    getUserId();
-  }, []);
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.greetingsContainer}>
           <Text style={styles.greetings}>
-            {user?.name ? `Olá, ${user.name}` : 'Olá'}
+            {user.name ? `Olá, ${user.name}` : 'Olá'}
           </Text>
-          <Icon style={styles.icon} name="menu" />
+          {/* quando clicar no menu lateral abrir uma outra rota */}
+          <Icon style={styles.icon} name="menu" onPress={() => {}} />
         </View>
         <Balance />
         <RecentTransactions />
         {/* <Goals /> */}
       </View>
-      <Footer navigation={navigation.navigate} />
     </View>
   );
 };
@@ -57,6 +45,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'space-between',
     backgroundColor: COLORS.background,
+    zIndex: 0,
   },
   greetingsContainer: {
     flexDirection: 'row',

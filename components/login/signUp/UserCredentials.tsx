@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {setUserEmail, setUserPassword} from '../../../features/userSlice';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
@@ -29,7 +27,6 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [isNameValid, setIsNameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [canSubmit, setCanSubmit] = useState(false);
-  const dispatch = useDispatch();
   const [createUser] = useCreateUserMutation();
 
   useEffect(() => {

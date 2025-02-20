@@ -1,30 +1,29 @@
 import {
-  Tokens,
   UserLogin,
   UserRegister,
-  UserLoginResponse,
+  LoginResponse,
   User,
-  createUserResponse,
+  CreateUserResponse,
 } from '../types/user.types';
 import {api} from './api';
 
 const userApi = api.injectEndpoints({
   endpoints: build => ({
-    login: build.mutation<UserLoginResponse, UserLogin>({
+    login: build.mutation<LoginResponse, UserLogin>({
       query: (user: UserLogin) => ({
         url: '/auth/login',
         method: 'POST',
         body: user,
       }),
     }),
-    createUser: build.mutation<createUserResponse, UserLogin>({
+    createUser: build.mutation<CreateUserResponse, UserRegister>({
       query: (createUser: UserRegister) => ({
         url: '/auth/createuser',
         method: 'POST',
         body: createUser,
       }),
     }),
-    createAnonymousUser: build.mutation<createUserResponse, void>({
+    createAnonymousUser: build.mutation<CreateUserResponse, void>({
       query: () => ({
         url: '/auth/createAnonymousUser',
         method: 'POST',
@@ -42,5 +41,9 @@ const userApi = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const {useLoginMutation, useCreateUserMutation, useGetUserQuery, useCreateAnonymousUserMutation} =
-  userApi;
+export const {
+  useLoginMutation,
+  useCreateUserMutation,
+  useGetUserQuery,
+  useCreateAnonymousUserMutation,
+} = userApi;

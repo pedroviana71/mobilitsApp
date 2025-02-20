@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
-import getTokens from '../../../utils/getTokens';
+import getTokensAndUserId from '../../../utils/getTokens';
 import {COLORS} from '../../../utils/theme';
 
 type WelcomeScreenProps = {
@@ -11,19 +11,6 @@ type WelcomeScreenProps = {
 };
 
 const Welcome = ({navigation}: WelcomeScreenProps) => {
-  useEffect(() => {
-    const checkUser = async () => {
-      const tokens = await getTokens();
-      return tokens;
-    };
-
-    checkUser().then(user => {
-      if (user) {
-        navigation.reset({index: 0, routes: [{name: 'Home'}]});
-      }
-    });
-  }, [navigation]);
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#00E06102" />

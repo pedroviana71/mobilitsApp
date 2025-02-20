@@ -4,14 +4,18 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {COLORS, FONTS} from '../../utils/theme';
 import Icon from 'react-native-vector-icons/Feather';
+import {useGetUserQuery} from '../../services/user';
+import {RootState} from '../../app/store';
+import {useSelector} from 'react-redux';
 
-type TransactionsProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList>;
+type RevenueProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Revenue'>;
 };
 
-const Transactions = ({navigation}: TransactionsProps) => {
-  const [transactions, setTransactions] = useState('');
-  // const transactions = ['revenue', 'expense', 'transfer'];
+const Revenue = ({navigation}: RevenueProps) => {
+  const userId = useSelector((state: RootState) => state.user._id);
+  const {data: user} = useGetUserQuery(userId);
+  console.log(userId);
 
   const handlePickTransaction = () => {};
 
@@ -20,7 +24,7 @@ const Transactions = ({navigation}: TransactionsProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.dropwdownContainer}>
-        <Text style={styles.dropdownTitle}>Pedro, registre uma</Text>
+        <Text style={styles.dropdownTitle}>{user?.name}, registre uma</Text>
         <Text style={styles.dropdownAction}>receita</Text>
         <Icon style={styles.dropdownIcon} name="chevron-down" size={16}></Icon>
       </View>
@@ -31,7 +35,7 @@ const Transactions = ({navigation}: TransactionsProps) => {
   );
 };
 
-export default Transactions;
+export default Revenue;
 
 const styles = StyleSheet.create({
   container: {

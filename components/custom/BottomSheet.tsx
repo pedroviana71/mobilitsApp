@@ -1,4 +1,4 @@
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 import Animated, {
@@ -10,12 +10,15 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from 'react-native-reanimated';
+import {COLORS} from '../../utils/theme';
 
 type Props = {
   onClose: () => void;
+  children: React.ReactNode;
+  height: number;
 };
 
-export function BottomSheet({onClose}: Props) {
+export function BottomSheet({onClose, children, height}: Props) {
   const offset = useSharedValue(0);
 
   function close() {
@@ -31,10 +34,10 @@ export function BottomSheet({onClose}: Props) {
       offset.value = offsetDelta > 0 ? offsetDelta : withSpring(clamp);
     })
     .onFinalize(() => {
-      if (offset.value < 220 / 3) {
+      if (offset.value < height / 6) {
         offset.value = withSpring(0);
       } else {
-        offset.value = withTiming(220, {}, () => {
+        offset.value = withTiming(height, {}, () => {
           runOnJS(close)();
         });
       }
@@ -47,11 +50,11 @@ export function BottomSheet({onClose}: Props) {
   return (
     <GestureDetector gesture={pan}>
       <Animated.View
-        style={[styles.container, translateY]}
+        style={[styles.container, translateY, {height: height}]}
         entering={SlideInDown.springify().damping(15)}
         exiting={SlideOutDown}>
-        <Text style={styles.title}>----</Text>
-        <Text style={styles.title}>OPÇÕES</Text>
+        <View style={styles.pushSheet} />
+        {children}
       </Animated.View>
     </GestureDetector>
   );
@@ -59,15 +62,25 @@ export function BottomSheet({onClose}: Props) {
 
 export const styles = StyleSheet.create({
   container: {
-    height: 220,
     width: '100%',
-    backgroundColor: '#1E1F23',
+    backgroundColor: COLORS.white,
     position: 'absolute',
     bottom: -20 * 1.3,
     alignItems: 'center',
+    paddingTop: 16,
+    shadowColor: COLORS.black80,
+    elevation: 20,
+    padding: 16,
+  },
+  pushSheet: {
+    width: 40,
+    height: 5,
+    backgroundColor: COLORS.black20,
+    borderRadius: 4,
+    marginBottom: 24,
   },
   title: {
-    color: '#FFF',
+    color: COLORS.black80,
     fontSize: 18,
     fontWeight: 'bold',
     margin: 24,

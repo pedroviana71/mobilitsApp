@@ -38,57 +38,34 @@ const Footer = () => {
     };
   };
 
+  const iconStyle = (route: string) => {
+    return [
+      styles.icon,
+      {
+        borderTopWidth: 2,
+        borderColor: selectedScreen(route).borderColor,
+        color: selectedScreen(route).iconColor,
+      },
+    ];
+  };
+
   return (
     <View>
       <View style={styles.container}>
         <Icon
           onPress={() => navigation.navigate('Home')}
-          style={[
-            styles.icon,
-            {
-              borderTopWidth: 2,
-              borderColor: selectedScreen('Home').borderColor,
-              color: selectedScreen('Home').iconColor,
-            },
-          ]}
+          style={iconStyle('Home')}
           name="home"
         />
-        <Icon
-          style={[
-            styles.icon,
-            {
-              borderTopWidth: 2,
-              borderColor: selectedScreen('Transactions').borderColor,
-              color: selectedScreen('Transactions').iconColor,
-            },
-          ]}
-          name="list"
-        />
+        <Icon style={iconStyle('Transactions')} name="list" />
         <Icon
           style={styles.addIcon}
           name="plus"
           onPress={handleOpenBottomSheet}
         />
+        <Icon style={iconStyle('Statistics')} name="pie-chart" />
         <Icon
-          style={[
-            styles.icon,
-            {
-              borderTopWidth: 2,
-              borderColor: selectedScreen('Statistics').borderColor,
-              color: selectedScreen('Statistics').iconColor,
-            },
-          ]}
-          name="pie-chart"
-        />
-        <Icon
-          style={[
-            styles.icon,
-            {
-              borderTopWidth: 2,
-              borderColor: selectedScreen('Profile').borderColor,
-              color: selectedScreen('Profile').iconColor,
-            },
-          ]}
+          style={iconStyle('Profile')}
           name="user"
           onPress={() => navigation.navigate('Profile')}
         />
@@ -103,6 +80,7 @@ const Footer = () => {
             <AppButton
               onPress={() => {
                 navigation.navigate('Revenue');
+                toggleSheet();
               }}
               title="Receita"
               backgroundColor={COLORS.green}

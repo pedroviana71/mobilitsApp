@@ -93,7 +93,7 @@ function App(): JSX.Element {
             </Stack.Screen>
             <Stack.Screen name="Revenue">
               {(props: ScreenProps<'Revenue'>) => (
-                <MainLayout showFooter={true}>
+                <MainLayout showFooter={false}>
                   <Revenue {...props} />
                 </MainLayout>
               )}

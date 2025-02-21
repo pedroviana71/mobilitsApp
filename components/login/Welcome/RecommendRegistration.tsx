@@ -4,9 +4,10 @@ import {StyleSheet, View, Image, StatusBar, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
-import {COLORS} from '../../../utils/theme';
+import {COLORS} from '../../../utils/styles';
 import {useCreateAnonymousUserMutation} from '../../../services/user';
 import * as Keychain from 'react-native-keychain';
+import {CONSTANTS} from '../../../utils/constants';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -28,17 +29,17 @@ const RecommendRegistration = ({navigation}: WelcomeScreenProps) => {
     }
 
     await Keychain.setInternetCredentials(
-      'accessToken',
+      CONSTANTS.ACCESS_TOKEN,
       'Anonymous',
       userCreated.data.tokens.accessToken,
     );
     await Keychain.setInternetCredentials(
-      'refreshToken',
+      CONSTANTS.REFRESH_TOKEN,
       'Anonymous',
       userCreated.data.tokens.refreshToken,
     );
     await Keychain.setInternetCredentials(
-      'userId',
+      CONSTANTS.USER_ID,
       'Anonymous',
       userCreated.data.user._id,
     );

@@ -8,10 +8,11 @@ import Goals from './Goals';
 import Footer from '../custom/Footer';
 import {useGetUserQuery} from '../../services/user';
 import * as Keychain from 'react-native-keychain';
-import {COLORS, FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/styles';
 import RecentTransactions from './RecentTransactions';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
+import getTokensAndUserId from '../../utils/getTokens';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -19,6 +20,12 @@ type HomeScreenProps = {
 
 const Home = ({navigation}: HomeScreenProps) => {
   const user = useSelector((state: RootState) => state.user);
+
+  const teste = async () => {
+    await getTokensAndUserId();
+  };
+
+  teste();
 
   return (
     <View style={styles.container}>

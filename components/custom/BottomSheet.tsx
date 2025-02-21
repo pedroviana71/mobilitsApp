@@ -10,7 +10,7 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from 'react-native-reanimated';
-import {COLORS} from '../../utils/theme';
+import {COLORS} from '../../utils/styles';
 
 type Props = {
   onClose: () => void;

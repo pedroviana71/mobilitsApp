@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {COLORS, FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/styles';
 
 const Balance = () => {
   return (

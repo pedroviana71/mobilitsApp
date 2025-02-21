@@ -6,7 +6,9 @@ import {useGetUserQuery} from '../../../services/user';
 import getTokensAndUserId from '../../../utils/getTokens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../App';
-import {COLORS} from '../../../utils/theme';
+import {COLORS} from '../../../utils/styles';
+import * as Keychain from 'react-native-keychain';
+import {resetTokens} from '../../../utils/resetTokens';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Splash'>;
@@ -19,7 +21,8 @@ const Splash = ({navigation}: WelcomeScreenProps) => {
   useEffect(() => {
     const checkUser = async () => {
       const tokens = await getTokensAndUserId();
-      if (tokens && tokens.userId) {
+
+      if (tokens?.userId) {
         setUserId(tokens.userId);
       } else {
         navigation.reset({index: 0, routes: [{name: 'Welcome'}]});
@@ -28,18 +31,23 @@ const Splash = ({navigation}: WelcomeScreenProps) => {
     checkUser();
   }, []);
 
-  const {data: user} = useGetUserQuery(userId ?? '', {
+  const {
+    data: user,
+    error,
+    isFetching,
+  } = useGetUserQuery(userId ?? '', {
     skip: !userId,
   });
 
   useEffect(() => {
     if (user) {
-      console.log('dentro useEffect', user);
-
       dispatch(setUser(user));
       navigation.reset({index: 0, routes: [{name: 'Home'}]});
+    } else if (error) {
+      resetTokens();
+      navigation.reset({index: 0, routes: [{name: 'Welcome'}]});
     }
-  }, [user]);
+  }, [user, navigation, dispatch, userId, isFetching]);
 
   return (
     <View style={styles.container}>

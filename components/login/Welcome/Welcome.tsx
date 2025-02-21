@@ -4,7 +4,7 @@ import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {RootStackParamList} from '../../../App';
 import AppButton from '../../custom/Button';
 import getTokensAndUserId from '../../../utils/getTokens';
-import {COLORS} from '../../../utils/theme';
+import {COLORS} from '../../../utils/styles';
 
 type WelcomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;

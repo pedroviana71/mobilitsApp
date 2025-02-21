@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {RootStackParamList} from '../../App';
-import {COLORS} from '../../utils/theme';
+import {COLORS} from '../../utils/styles';
 import {BottomSheet} from './BottomSheet';
 import AppButton from './Button';
 import {useSelector} from 'react-redux';

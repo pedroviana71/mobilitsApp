@@ -6,6 +6,10 @@ import * as Keychain from 'react-native-keychain';
 import {RootStackParamList} from '../../../App';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {resetTokens} from '../../../utils/resetTokens';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '../../../features/userSlice';
+import getTokensAndUserId from '../../../utils/getTokens';
+import {CONSTANTS} from '../../../utils/constants';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -15,6 +19,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const handleEmail = (text: string) => {
     setEmail(text);
@@ -36,21 +41,25 @@ const Login = ({navigation}: UserCredentialsProps) => {
 
     resetTokens();
 
+    console.log('response Id', response.data.user._id);
+
     await Keychain.setInternetCredentials(
-      'userId',
+      CONSTANTS.USER_ID,
       username,
       response.data.user._id,
     );
     await Keychain.setInternetCredentials(
-      'accessToken',
+      CONSTANTS.ACCESS_TOKEN,
       username,
       response.data.tokens.accessToken,
     );
     await Keychain.setInternetCredentials(
-      'refreshToken',
+      CONSTANTS.REFRESH_TOKEN,
       username,
       response.data.tokens.refreshToken,
     );
+
+    dispatch(setUser(response.data.user));
 
     navigation.reset({index: 0, routes: [{name: 'Home'}]});
   };

@@ -1,21 +1,24 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
-import {COLORS, FONTS} from '../../utils/theme';
+import {COLORS, FONTS} from '../../utils/styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {useGetUserQuery} from '../../services/user';
 import {RootState} from '../../app/store';
 import {useSelector} from 'react-redux';
+import CurrencyInput from './Form/CurrencyInput';
+import HorizontalSeparator from '../custom/HorizontalSeparator';
 
 type RevenueProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Revenue'>;
 };
 
 const Revenue = ({navigation}: RevenueProps) => {
-  const userId = useSelector((state: RootState) => state.user._id);
-  const {data: user} = useGetUserQuery(userId);
-  console.log(userId);
+  const user = useSelector((state: RootState) => state.user);
+  const [currencyValue, setCurrencyValue] = useState('0,00');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handlePickTransaction = () => {};
 
@@ -29,7 +32,34 @@ const Revenue = ({navigation}: RevenueProps) => {
         <Icon style={styles.dropdownIcon} name="chevron-down" size={16}></Icon>
       </View>
       <View style={styles.inputsContainer}>
-        {/* <FormRevenueExpense isRevenue={isRevenue} navigation={navigation} /> */}
+        <CurrencyInput
+          currencyValue={currencyValue}
+          handleCurrencyValue={setCurrencyValue}
+          color={COLORS.green}
+        />
+        <HorizontalSeparator />
+        <View style={styles.inputs}>
+          <Text style={styles.label}>Título</Text>
+          <TextInput
+            placeholder="Digite o título"
+            style={styles.textInput}
+            value={title}
+            onChange={e => setTitle(e.nativeEvent.text)}
+            placeholderTextColor={COLORS.black20}
+          />
+        </View>
+        <HorizontalSeparator />
+        <View style={styles.inputs}>
+          <Text style={styles.label}>Descrição</Text>
+          <TextInput
+            placeholder="Digite a descrição"
+            style={[styles.textInput, {height: 96, textAlignVertical: 'top'}]}
+            value={description}
+            onChange={e => setDescription(e.nativeEvent.text)}
+            placeholderTextColor={COLORS.black20}
+          />
+        </View>
+        <HorizontalSeparator />
       </View>
     </View>
   );
@@ -71,6 +101,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flexGrow: 1,
     paddingBottom: 100,
+  },
+  inputs: {
+    marginVertical: 16,
+    gap: 8,
+  },
+  label: {
+    fontFamily: FONTS.medium,
+  },
+  textInput: {
+    fontFamily: FONTS.medium,
+    borderRadius: 15,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: COLORS.black20,
   },
   buttonContainer: {
     flexDirection: 'row',

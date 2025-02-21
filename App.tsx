@@ -16,7 +16,7 @@ import RecommendRegistration from './components/login/Welcome/RecommendRegistrat
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Splash from './components/login/splash/Splash';
 import MainLayout from './MainLayout';
-import {COLORS} from './utils/theme';
+import {COLORS} from './utils/styles';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -65,7 +65,7 @@ function App(): JSX.Element {
             </Stack.Screen>
             <Stack.Screen name="Welcome">
               {(props: ScreenProps<'Welcome'>) => (
-                <MainLayout showFooter={true}>
+                <MainLayout showFooter={false}>
                   <Welcome {...props} />
                 </MainLayout>
               )}

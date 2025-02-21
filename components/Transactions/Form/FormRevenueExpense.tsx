@@ -39,7 +39,7 @@ const FormRevenueExpense = ({
   };
 
   const handleAddNewApp = () => {
-    navigation.navigate('AddApp');
+    // navigation.navigate('AddApp');
   };
 
   const onClickItem = (item: any) => {

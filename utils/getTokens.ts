@@ -1,14 +1,22 @@
 import * as Keychain from 'react-native-keychain';
+import {CONSTANTS} from './constants';
 
 const getTokensAndUserId = async () => {
-  const accessToken = await Keychain.getInternetCredentials('accessToken');
-  const refreshToken = await Keychain.getInternetCredentials('refreshToken');
-  const userId = await Keychain.getInternetCredentials('userId');
+  const accessToken = await Keychain.getInternetCredentials(
+    CONSTANTS.ACCESS_TOKEN,
+  );
+  const refreshToken = await Keychain.getInternetCredentials(
+    CONSTANTS.REFRESH_TOKEN,
+  );
+  const userId = await Keychain.getInternetCredentials(CONSTANTS.USER_ID);
 
-  if (accessToken === false || refreshToken === false || userId === false) {
-    return false;
+  console.log('userId Token', userId && userId.password);
+
+  if (!accessToken || !refreshToken || !userId) {
+    return null;
   }
-  if (accessToken.password && refreshToken.password) {
+
+  if (accessToken.password && refreshToken.password && userId.password) {
     return {
       accessToken: accessToken.password,
       refreshToken: refreshToken.password,

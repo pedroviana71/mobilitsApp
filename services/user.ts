@@ -16,8 +16,8 @@ const userApi = api.injectEndpoints({
         body: user,
       }),
     }),
-    createUser: build.mutation<CreateUserResponse, UserRegister>({
-      query: (createUser: UserRegister) => ({
+    createUser: build.mutation<CreateUserResponse, Partial<User>>({
+      query: (createUser: Partial<User>) => ({
         url: '/auth/createuser',
         method: 'POST',
         body: createUser,

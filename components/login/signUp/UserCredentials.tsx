@@ -6,12 +6,13 @@ import AppButton from '../../custom/Button';
 import InputAlert from '../../custom/InputAlert';
 import {emailValidation} from '../../../utils/formValidations/emailValidation';
 import {passwordValidation} from '../../../utils/formValidations/passwordValidation';
-import {COLORS} from '../../../utils/theme';
+import {COLORS} from '../../../utils/styles';
 import {
   useCreateAnonymousUserMutation,
   useCreateUserMutation,
 } from '../../../services/user';
 import * as Keychain from 'react-native-keychain';
+import {CONSTANTS} from '../../../utils/constants';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserCredentials'>;
@@ -30,7 +31,7 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
   const [createUser] = useCreateUserMutation();
 
   useEffect(() => {
-    if (password && passwordConfirmation && email && name) {
+    if (password && passwordConfirmation === password && email && name) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -92,17 +93,17 @@ const UserCredentials = ({navigation}: UserCredentialsProps) => {
     }
 
     await Keychain.setInternetCredentials(
-      'accessToken',
+      CONSTANTS.ACCESS_TOKEN,
       user.name,
       userCreated.data.tokens.accessToken,
     );
     await Keychain.setInternetCredentials(
-      'refreshToken',
+      CONSTANTS.REFRESH_TOKEN,
       user.name,
       userCreated.data.tokens.refreshToken,
     );
     await Keychain.setInternetCredentials(
-      'userId',
+      CONSTANTS.USER_ID,
       user.name,
       userCreated.data.user._id,
     );

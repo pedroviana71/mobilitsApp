@@ -16,8 +16,9 @@ type dataType = {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://192.168.40.138:3000/', //ip do modem de fortal
+  // baseUrl: 'http://192.168.40.138:3000/', //ip do modem  CABEADO de fortal
   // baseUrl: 'http://192.168.15.1:3000/', // ip do modem de minas
+  baseUrl: 'http://192.168.40.114:3000/', // ip do modem WIFI de fortal
   credentials: 'include',
   prepareHeaders: async headers => {
     const tokens = await getTokensAndUserId();

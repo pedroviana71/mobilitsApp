@@ -29,6 +29,7 @@ const CurrencyInput = ({
         inputMode="numeric"
         onChangeText={handleMonetaryValue}
         value={currencyValue.toString().replace('.', ',')}
+        maxLength={10}
       />
     </View>
   );
@@ -39,7 +40,6 @@ export default CurrencyInput;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',

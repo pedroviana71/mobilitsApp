@@ -3,7 +3,7 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import HorizontalSeparator from '../../custom/HorizontalSeparator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AppButton from '../../custom/Button';
-import PickDate from '../PickDate';
+import PickDate from './PickDate';
 import Dropdown from '../../custom/Dropdown';
 import {priceMask} from '../../../utils/priceMask';
 import {useGetUserQuery} from '../../../services/user';

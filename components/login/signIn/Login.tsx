@@ -39,10 +39,6 @@ const Login = ({navigation}: UserCredentialsProps) => {
 
     const username = response.data.user.name!;
 
-    resetTokens();
-
-    console.log('response Id', response.data.user._id);
-
     await Keychain.setInternetCredentials(
       CONSTANTS.USER_ID,
       username,

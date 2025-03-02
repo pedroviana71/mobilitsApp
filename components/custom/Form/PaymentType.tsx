@@ -2,7 +2,7 @@ import React, {Dispatch, SetStateAction} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {COLORS, FONTS} from '../../../utils/styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {PAYMENT_TYPES, PaymentType} from '../Revenue';
+import {PAYMENT_TYPES, PaymentType} from '../../Transactions/Revenue';
 
 interface PaymentTypeProps {
   paymentType: PaymentType;

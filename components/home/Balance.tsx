@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   currentBalanceLabel: {
     fontSize: 16,
     fontFamily: FONTS.regular,
-    color: COLORS.black60,
+    color: COLORS.black80,
   },
   currentBalance: {
     fontSize: 24,

@@ -17,9 +17,13 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Splash from './components/login/splash/Splash';
 import MainLayout from './MainLayout';
 import {COLORS} from './utils/styles';
+import Menu from './components/home/Menu';
+import AccountCreditCardManager from './components/accountAndCreditCards/AccountCreditCardManager';
+import NewAccount from './components/accountAndCreditCards/NewAccount';
 
 export type RootStackParamList = {
   Home: undefined;
+  Menu: undefined;
   Welcome: undefined;
   RecommendRegistration: undefined;
   UserCredentials: undefined;
@@ -28,6 +32,8 @@ export type RootStackParamList = {
   Profile: undefined;
   Splash: undefined;
   Revenue: undefined;
+  AccountCreditCardManager: undefined;
+  NewAccount: undefined;
 };
 
 type ScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -60,6 +66,27 @@ function App(): JSX.Element {
               {(props: ScreenProps<'Home'>) => (
                 <MainLayout showFooter={true}>
                   <Home {...props} />
+                </MainLayout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Menu">
+              {(props: ScreenProps<'Menu'>) => (
+                <MainLayout showFooter={false}>
+                  <Menu {...props} />
+                </MainLayout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="AccountCreditCardManager">
+              {(props: ScreenProps<'AccountCreditCardManager'>) => (
+                <MainLayout showFooter={false}>
+                  <AccountCreditCardManager {...props} />
+                </MainLayout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="NewAccount">
+              {(props: ScreenProps<'NewAccount'>) => (
+                <MainLayout showFooter={false}>
+                  <NewAccount {...props} />
                 </MainLayout>
               )}
             </Stack.Screen>

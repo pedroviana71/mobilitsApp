@@ -6,11 +6,13 @@ import {COLORS, FONTS} from '../../utils/styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {RootState} from '../../app/store';
 import {useSelector} from 'react-redux';
-import CurrencyInput from './Form/CurrencyInput';
+import CurrencyInput from '../custom/Form/CurrencyInput';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
-import PickDate from './Form/PickDate';
+import PickDate from '../custom/Form/PickDate';
 import {DateTime} from 'luxon';
-import PickPaymentType from './Form/PaymentType';
+import PickPaymentType from '../custom/Form/PaymentType';
+import ScreenHeader from '../custom/ScreenHeader';
+// import PickPaymentType from './Form/PaymentType';
 
 type RevenueProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Revenue'>;
@@ -25,7 +27,7 @@ export type PaymentType = (typeof PAYMENT_TYPES)[keyof typeof PAYMENT_TYPES];
 
 const Revenue = ({navigation}: RevenueProps) => {
   const user = useSelector((state: RootState) => state.user);
-  const [currencyValue, setCurrencyValue] = useState('0,00');
+  const [value, setValue] = useState(0);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(DateTime.now());
@@ -39,15 +41,15 @@ const Revenue = ({navigation}: RevenueProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.dropwdownContainer}>
-        <Text style={styles.dropdownTitle}>{user?.name}, registre uma</Text>
-        <Text style={styles.dropdownAction}>receita</Text>
-        <Icon style={styles.dropdownIcon} name="chevron-down" size={16}></Icon>
-      </View>
+      <ScreenHeader
+        preText="registre uma"
+        actionText="receita"
+        justifyContent="center"
+      />
       <View style={styles.inputsContainer}>
         <CurrencyInput
-          currencyValue={currencyValue}
-          handleCurrencyValue={setCurrencyValue}
+          value={value}
+          handleInputChange={setValue}
           color={COLORS.green}
         />
         <HorizontalSeparator />
@@ -86,6 +88,8 @@ const Revenue = ({navigation}: RevenueProps) => {
           paymentType={paymentType}
           setPaymentType={setPaymentType}
         />
+        <HorizontalSeparator />
+        {/* <SelectList /> */}
       </View>
     </View>
   );
@@ -97,28 +101,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.background,
     height: '100%',
-  },
-  dropwdownContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-  },
-  dropdownTitle: {
-    fontSize: 16,
-    fontFamily: FONTS.light,
-    marginLeft: 16,
-    color: COLORS.black60,
-  },
-  dropdownAction: {
-    fontFamily: FONTS.medium,
-    fontSize: 16,
-    paddingHorizontal: 4,
-    color: COLORS.black80,
-  },
-  dropdownIcon: {
-    paddingLeft: 10,
-    color: COLORS.black60,
   },
   inputsContainer: {
     backgroundColor: '#FFFFFF',

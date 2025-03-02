@@ -5,18 +5,22 @@ import {priceMask} from '../../../utils/priceMask';
 import {COLORS} from '../../../utils/styles';
 
 interface CurrencyInputProps {
-  currencyValue: string;
+  value: number;
   color: string;
-  handleCurrencyValue: Dispatch<SetStateAction<string>>;
+  handleInputChange: Dispatch<SetStateAction<number>>;
 }
 
 const CurrencyInput = ({
-  currencyValue,
+  value,
   color,
-  handleCurrencyValue,
+  handleInputChange,
 }: CurrencyInputProps) => {
-  const handleMonetaryValue = (value: string) => {
-    handleCurrencyValue(priceMask(value));
+  const [maskedValue, setMaskedValue] = useState('0,00');
+
+  const handleMonetaryValue = (inputValue: string) => {
+    const realValue = Number(priceMask(inputValue).replace(',', '.'));
+    setMaskedValue(priceMask(inputValue));
+    handleInputChange(realValue);
   };
 
   return (
@@ -28,8 +32,9 @@ const CurrencyInput = ({
         style={styles.currencyInput}
         inputMode="numeric"
         onChangeText={handleMonetaryValue}
-        value={currencyValue.toString().replace('.', ',')}
+        value={maskedValue}
         maxLength={10}
+        autoFocus
       />
     </View>
   );

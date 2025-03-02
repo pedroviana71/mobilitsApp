@@ -8,6 +8,7 @@ import getTokensAndUserId from '../utils/getTokens';
 import * as Keychain from 'react-native-keychain';
 import {CreateUserResponse} from '../types/user.types';
 import {resetTokens} from '../utils/resetTokens';
+import {CONSTANTS} from '../utils/constants';
 
 type dataType = {
   message: string;
@@ -87,7 +88,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         api,
         extraOptions,
       );
-      await Keychain.resetInternetCredentials('userId');
+      await Keychain.resetInternetCredentials(CONSTANTS.USER_ID);
     }
   }
   return result;
@@ -96,5 +97,5 @@ export const baseQueryWithReauth: BaseQueryFn<
 export const api = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
-  tagTypes: ['User'],
+  tagTypes: ['User', 'Account'],
 });

@@ -5,14 +5,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Feather';
 import Balance from './Balance';
 import Goals from './Goals';
-import Footer from '../custom/Footer';
-import {useGetUserQuery} from '../../services/user';
-import * as Keychain from 'react-native-keychain';
 import {COLORS, FONTS} from '../../utils/styles';
 import RecentTransactions from './RecentTransactions';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
-import getTokensAndUserId from '../../utils/getTokens';
+import Animated, {LightSpeedInLeft} from 'react-native-reanimated';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -21,27 +18,25 @@ type HomeScreenProps = {
 const Home = ({navigation}: HomeScreenProps) => {
   const user = useSelector((state: RootState) => state.user);
 
-  const teste = async () => {
-    await getTokensAndUserId();
+  const handleMenuPress = () => {
+    navigation.navigate('Menu');
   };
 
-  teste();
-
   return (
-    <View style={styles.container}>
+    <Animated.View style={styles.container} entering={LightSpeedInLeft}>
       <View>
         <View style={styles.greetingsContainer}>
           <Text style={styles.greetings}>
-            {user.name ? `Olá, ${user.name}` : 'Olá'}
+            {user.name ? `Olá, ${user.name}` : 'Olá!'}
           </Text>
           {/* quando clicar no menu lateral abrir uma outra rota */}
-          <Icon style={styles.icon} name="menu" onPress={() => {}} />
+          <Icon style={styles.icon} name="menu" onPress={handleMenuPress} />
         </View>
         <Balance />
         <RecentTransactions />
         {/* <Goals /> */}
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

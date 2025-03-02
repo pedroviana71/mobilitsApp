@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '../../../features/userSlice';
 import getTokensAndUserId from '../../../utils/getTokens';
 import {CONSTANTS} from '../../../utils/constants';
+import {COLORS} from '../../../utils/styles';
 
 type UserCredentialsProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -62,7 +63,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.formContainer}>
         <Text style={styles.title}>Entrar na conta</Text>
         <TextInput
           value={email}
@@ -71,7 +72,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
           style={styles.input}
           keyboardType="email-address"
           autoCapitalize="none"
-          placeholderTextColor="#BDBDBD"
+          placeholderTextColor={COLORS.black60}
         />
         <TextInput
           value={password}
@@ -80,22 +81,25 @@ const Login = ({navigation}: UserCredentialsProps) => {
           style={styles.input}
           autoCapitalize="none"
           secureTextEntry
-          placeholderTextColor="#BDBDBD"
+          placeholderTextColor={COLORS.black60}
         />
       </View>
       <View style={styles.buttonContainer}>
         <AppButton
           title="Entrar"
-          backgroundColor="#5DB075"
-          textColor="#E9ECED"
+          backgroundColor={COLORS.green}
+          textColor={COLORS.black80}
           onPress={handleSignIn}
+          shadowColor={COLORS.black20}
+          elevation={10}
         />
         <AppButton
-          title="Esqueceu sua senha?"
-          backgroundColor="#E9ECED"
-          textColor="#5DB075"
+          title="Esqueci a senha"
+          backgroundColor={COLORS.white}
+          textColor={COLORS.black80}
           onPress={() => {}}
-          fontWeight="600"
+          shadowColor={COLORS.black20}
+          elevation={10}
         />
       </View>
     </View>
@@ -109,21 +113,28 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
-    backgroundColor: '#E9ECED',
+    backgroundColor: COLORS.background,
     justifyContent: 'space-between',
+  },
+  formContainer: {
+    gap: 16,
   },
   title: {
     fontSize: 30,
     fontWeight: '600',
-    color: '#4B9460',
+    color: COLORS.black80,
     marginBottom: 32,
   },
   input: {
-    backgroundColor: '#F6F6F6',
+    backgroundColor: COLORS.white,
     borderRadius: 15,
-    marginBottom: 16,
+    borderColor: COLORS.black20,
+    borderStyle: 'solid',
+    borderWidth: 0.5,
     paddingLeft: 8,
-    color: '#4B9460',
+    elevation: 6,
+    shadowColor: COLORS.black20,
+    fontFamily: 'NotoSansLight',
   },
   buttonContainer: {
     width: '100%',

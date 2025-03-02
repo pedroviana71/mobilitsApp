@@ -7,7 +7,9 @@ export const priceMask = (value: string) => {
 
   newPrice = parseFloat(
     newPrice.replace(/[^\d]/g, '').replace(/(\d\d?)$/, '.$1'),
-  ).toFixed(2);
+  )
+    .toFixed(2)
+    .replace('.', ',');
 
   return newPrice;
 };

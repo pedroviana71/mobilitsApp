@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
 import {COLORS, FONTS} from '../../utils/styles';
@@ -12,6 +12,9 @@ import PickDate from '../custom/Form/PickDate';
 import {DateTime} from 'luxon';
 import PickPaymentType from '../custom/Form/PaymentType';
 import ScreenHeader from '../custom/ScreenHeader';
+import MenuDropdown from '../custom/Form/MenuDropdown';
+import {useGetAccountsQuery} from '../../services/account';
+import AppButton from '../custom/Button';
 // import PickPaymentType from './Form/PaymentType';
 
 type RevenueProps = {
@@ -24,16 +27,23 @@ export const PAYMENT_TYPES = {
 } as const;
 
 export type PaymentType = (typeof PAYMENT_TYPES)[keyof typeof PAYMENT_TYPES];
+type accountType = {_id: string; name: string} | '';
 
 const Revenue = ({navigation}: RevenueProps) => {
   const user = useSelector((state: RootState) => state.user);
   const [value, setValue] = useState(0);
   const [title, setTitle] = useState('');
+  const [account, setAccount] = useState<accountType>('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(DateTime.now());
   const [paymentType, setPaymentType] = useState<PaymentType>(
     PAYMENT_TYPES.SINGLE,
   );
+  const {data: accounts} = useGetAccountsQuery(user._id);
+
+  const handleAccountSelection = () => {
+    // setAccount();
+  };
 
   const handlePickTransaction = () => {};
 
@@ -46,7 +56,7 @@ const Revenue = ({navigation}: RevenueProps) => {
         actionText="receita"
         justifyContent="center"
       />
-      <View style={styles.inputsContainer}>
+      <ScrollView style={styles.inputsContainer}>
         <CurrencyInput
           value={value}
           handleInputChange={setValue}
@@ -69,7 +79,7 @@ const Revenue = ({navigation}: RevenueProps) => {
           <Text style={styles.label}>Descrição</Text>
           <TextInput
             placeholder="Digite a descrição"
-            style={[styles.textInput, {height: 96, textAlignVertical: 'top'}]}
+            style={[styles.textInput, {height: 61, textAlignVertical: 'top'}]}
             value={description}
             onChange={e => setDescription(e.nativeEvent.text)}
             placeholderTextColor={COLORS.black20}
@@ -89,7 +99,34 @@ const Revenue = ({navigation}: RevenueProps) => {
           setPaymentType={setPaymentType}
         />
         <HorizontalSeparator />
-        {/* <SelectList /> */}
+        <View style={styles.inputs}>
+          <Text style={styles.label}>Conta</Text>
+          <MenuDropdown
+            label="Selecione a conta"
+            selectedItem={account}
+            handleInputItem={setAccount}
+            data={accounts ?? []}
+          />
+        </View>
+      </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <AppButton
+          title="Salvar"
+          backgroundColor={COLORS.green}
+          textColor={COLORS.black80}
+          onPress={() => {}}
+          shadowColor={COLORS.black20}
+          elevation={10}
+        />
+        <AppButton
+          title="Cancelar"
+          backgroundColor={COLORS.white}
+          textColor={COLORS.black80}
+          onPress={() => navigation.navigate('AccountCreditCardManager')}
+          shadowColor={COLORS.black20}
+          elevation={10}
+        />
       </View>
     </View>
   );
@@ -101,6 +138,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.background,
     height: '100%',
+    flexGrow: 1,
   },
   inputsContainer: {
     backgroundColor: '#FFFFFF',
@@ -125,9 +163,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.black20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-    marginVertical: 16,
-    justifyContent: 'space-between',
+    gap: 16,
+    paddingHorizontal: 16,
+    marginBottom: 32,
   },
 });

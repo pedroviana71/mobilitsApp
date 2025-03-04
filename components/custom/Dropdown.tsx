@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -8,71 +8,68 @@ import {
 } from 'react-native';
 import {Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {COLORS} from '../../utils/styles';
 
 interface DropdownProps {
-  label: string;
   data: {name: string; _id: string}[];
-  onClickItem: (item: {name: string; _id: string}) => void;
-  onClickAddNewApp: () => void;
+  handleInputItem: (item: {name: string; _id: string}) => void;
+  showDropdown: boolean;
+  setShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Dropdown = ({
-  label,
   data,
-  onClickItem,
-  onClickAddNewApp,
+  handleInputItem,
+  showDropdown,
+  setShowDropdown,
 }: DropdownProps) => {
-  const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownTop, setDropdownTop] = useState(0);
-  const dropdownRef = useRef<TouchableOpacity>(null);
+  const dropdownRef = useRef<View>(null);
 
   const handleShowDropdown = () => {
-    dropdownRef.current?.measure((_fx, _fy, _w, h, _px, py) => {
-      setDropdownTop(h + py);
-    });
     setShowDropdown(!showDropdown);
   };
 
   const handleClickItem = (item: {name: string; _id: string}) => {
     setShowDropdown(false);
-    if (item.name === 'Adicionar Item') {
-      onClickAddNewApp();
-      return;
-    }
-    onClickItem(item);
+
+    handleInputItem(item);
   };
+
+  useEffect(() => {
+    if (showDropdown && dropdownRef.current) {
+      dropdownRef.current.measure((_fx, _fy, _width, height, _px, py) => {
+        setDropdownTop(py + height);
+      });
+    }
+  }, [showDropdown]);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleShowDropdown} ref={dropdownRef}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>{label}</Text>
-          <Icon name="arrow-drop-down" />
-        </View>
+      <TouchableOpacity onPress={handleShowDropdown}>
+        <View ref={dropdownRef}></View>
       </TouchableOpacity>
-      {showDropdown && (
-        <Modal visible={showDropdown} transparent>
-          <Pressable
-            onPress={handleShowDropdown}
-            style={styles.touchableContainer}>
-            <FlatList
-              style={[
-                styles.dropdown,
-                {
-                  top: dropdownTop,
-                  left: 50,
-                },
-              ]}
-              data={[...data, {_id: '0', name: 'Adicionar Item'}]}
-              renderItem={({item}) => (
-                <Text onPress={() => handleClickItem(item)} style={styles.text}>
-                  {item.name}
-                </Text>
-              )}
-            />
-          </Pressable>
-        </Modal>
-      )}
+      <Modal visible={showDropdown} transparent style={styles.container}>
+        <Pressable
+          onPress={handleShowDropdown}
+          style={styles.touchableContainer}>
+          <FlatList
+            style={[
+              styles.dropdown,
+              {
+                top: dropdownTop,
+                left: 0,
+              },
+            ]}
+            data={data}
+            renderItem={({item}) => (
+              <Text onPress={() => handleClickItem(item)} style={styles.text}>
+                {item.name}
+              </Text>
+            )}
+          />
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -81,30 +78,24 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
-  labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 8,
-    width: '100%',
-  },
-  label: {
-    fontSize: 18,
-  },
   dropdown: {
-    marginTop: 8,
+    width: '90%',
+    marginTop: 16,
     position: 'absolute',
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
-    shadowColor: '#000000',
-    elevation: 3,
-    padding: 8,
+    shadowColor: COLORS.black60,
+    elevation: 10,
+    paddingLeft: 16,
+    marginHorizontal: 16,
   },
   touchableContainer: {
     height: '100%',
   },
   text: {
     fontSize: 18,
-    paddingVertical: 8,
+    color: COLORS.black80,
+    paddingVertical: 12,
   },
 });
 

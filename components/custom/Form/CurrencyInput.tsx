@@ -5,16 +5,11 @@ import {priceMask} from '../../../utils/priceMask';
 import {COLORS} from '../../../utils/styles';
 
 interface CurrencyInputProps {
-  value: number;
   color: string;
   handleInputChange: Dispatch<SetStateAction<number>>;
 }
 
-const CurrencyInput = ({
-  value,
-  color,
-  handleInputChange,
-}: CurrencyInputProps) => {
+const CurrencyInput = ({color, handleInputChange}: CurrencyInputProps) => {
   const [maskedValue, setMaskedValue] = useState('0,00');
 
   const handleMonetaryValue = (inputValue: string) => {
@@ -25,7 +20,7 @@ const CurrencyInput = ({
 
   return (
     <View style={[styles.container, {backgroundColor: color}]}>
-      <Text style={styles.moneyMask}>R$ </Text>
+      <Text style={styles.moneySymbol}>R$ </Text>
       <TextInput
         placeholder="0,00"
         placeholderTextColor={color}
@@ -53,12 +48,7 @@ const styles = StyleSheet.create({
     elevation: 15,
     shadowColor: COLORS.black80,
   },
-  inputs: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 16,
-  },
-  moneyMask: {
+  moneySymbol: {
     fontSize: 48,
     fontFamily: 'NotoSansMedium',
     color: COLORS.black80,

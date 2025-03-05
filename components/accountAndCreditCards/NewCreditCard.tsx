@@ -10,20 +10,24 @@ import AppButton from '../custom/Button';
 import {useCreateAccountMutation} from '../../services/account';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
+import PickDay from '../custom/Form/PickDay';
+import {DateTime} from 'luxon';
 
-type NewAccountProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'NewAccount'>;
+type NewCreditCardProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewCreditCard'>;
 };
 
-const NewAccount = ({navigation}: NewAccountProps) => {
+const NewCreditCard = ({navigation}: NewCreditCardProps) => {
+  const user = useSelector((state: RootState) => state.user);
   const [balance, setBalance] = useState(0);
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
-  const user = useSelector((state: RootState) => state.user);
+  const [dueDate, setDueDate] = useState<DateTime | null>(null);
+  const [closingDate, setClosingDate] = useState<DateTime | null>(null);
 
   const [createAccount] = useCreateAccountMutation();
 
-  const handleCreateAccount = async () => {
+  const handleCreateCreditCard = async () => {
     const account = {
       userId: user._id,
       balance,
@@ -43,16 +47,16 @@ const NewAccount = ({navigation}: NewAccountProps) => {
   return (
     <View style={styles.container}>
       <ScreenHeader
-        preText="adicione uma"
-        actionText="conta corrente"
+        preText="adicione um"
+        actionText="cartão de crédito"
         justifyContent="center"
       />
       <View style={styles.inputsContainer}>
         <View>
-          <Text style={styles.label}>Dinheiro na conta:</Text>
+          <Text style={styles.label}>Limite do cartão:</Text>
           <CurrencyInput color={COLORS.green} handleInputChange={setBalance} />
           <View style={styles.inputs}>
-            <Text style={styles.label}>Nome</Text>
+            <Text style={styles.label}>Nome do cartão</Text>
             <TextInput
               placeholder="Digite o nome"
               style={styles.textInput}
@@ -66,6 +70,18 @@ const NewAccount = ({navigation}: NewAccountProps) => {
             label="Selecione uma cor"
             handleColorChange={setColor}
           />
+          <PickDay
+            date={closingDate}
+            setDate={setClosingDate}
+            backgroundColor={COLORS.black20}
+            label="Dia do fechamento"
+          />
+          <PickDay
+            date={dueDate}
+            setDate={setDueDate}
+            backgroundColor={COLORS.black20}
+            label="Dia de vencimento"
+          />
         </View>
         <View>
           <View style={styles.buttonContainer}>
@@ -73,7 +89,7 @@ const NewAccount = ({navigation}: NewAccountProps) => {
               title="Salvar"
               backgroundColor={COLORS.green}
               textColor={COLORS.black80}
-              onPress={handleCreateAccount}
+              onPress={handleCreateCreditCard}
               shadowColor={COLORS.black20}
               elevation={10}
             />
@@ -92,7 +108,7 @@ const NewAccount = ({navigation}: NewAccountProps) => {
   );
 };
 
-export default NewAccount;
+export default NewCreditCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -111,6 +127,10 @@ const styles = StyleSheet.create({
   inputs: {
     marginVertical: 16,
     gap: 8,
+  },
+  picker: {
+    // padding: 0,
+    // margin: 0,
   },
   textInput: {
     fontFamily: FONTS.medium,

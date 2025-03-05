@@ -4,9 +4,10 @@ import {Calendar} from 'react-native-calendars';
 import {DateTime} from 'luxon';
 import {COLORS, FONTS} from '../../../utils/styles';
 interface PickDateProps {
-  date: DateTime;
-  setDate: Dispatch<SetStateAction<DateTime>>;
+  date?: DateTime | null;
+  setDate: Dispatch<SetStateAction<DateTime | null>>;
   backgroundColor: string;
+  label?: string;
 }
 interface dateCalendar {
   dateString: string;
@@ -16,75 +17,32 @@ interface dateCalendar {
   year: number;
 }
 
-const PickDate = ({date, setDate, backgroundColor}: PickDateProps) => {
+const PickDate = ({date, setDate, backgroundColor, label}: PickDateProps) => {
   const [showCalendar, setShowCalendar] = useState(false);
-
-  const today = DateTime.now();
-  const yesterday = today.minus({days: 1});
-  const isOtherDate =
-    date.toISODate() !== today.toISODate() &&
-    date.toISODate() !== today.minus({days: 1}).toISODate();
 
   const handleDateFromCalendar = (calendarDate: dateCalendar) => {
     setDate(() => DateTime.fromISO(calendarDate.dateString));
     setShowCalendar(false);
   };
 
-  const handleChangeDate = (newDate: DateTime, showCalendar: boolean) => {
-    setDate(newDate);
-    setShowCalendar(showCalendar);
-  };
-
   return (
     <>
       <View style={styles.inputs}>
-        <Text style={styles.label}>Data</Text>
+        <Text style={styles.label}>{label ? label : 'Data'}</Text>
         <View style={styles.dateContainer}>
-          <TouchableOpacity
-            onPress={() => handleChangeDate(DateTime.now(), false)}>
-            <Text
-              style={[
-                styles.dateBox,
-                {
-                  backgroundColor:
-                    today.toISODate() === date.toISODate()
-                      ? backgroundColor
-                      : backgroundColor + '20',
-                },
-              ]}>
-              Hoje
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              handleChangeDate(DateTime.now().minus({days: 1}), false)
-            }>
-            <Text
-              style={[
-                styles.dateBox,
-                {
-                  backgroundColor:
-                    yesterday.toISODate() === date.toISODate()
-                      ? backgroundColor
-                      : backgroundColor + '20',
-                },
-              ]}>
-              Ontem
-            </Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
             <Text
               style={[
                 styles.dateBox,
                 {
-                  backgroundColor: isOtherDate
+                  backgroundColor: date
                     ? backgroundColor
                     : backgroundColor + '20',
                 },
               ]}>
-              {isOtherDate && !showCalendar
-                ? date.toLocaleString()
-                : 'Outra data'}
+              {date && !showCalendar
+                ? 'Dia ' + date.toFormat('dd')
+                : 'Escolha a data'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -94,13 +52,15 @@ const PickDate = ({date, setDate, backgroundColor}: PickDateProps) => {
         <Calendar
           onDayPress={handleDateFromCalendar}
           hideDayNames={true}
-          initialDate={today.toISODate()}
-          style={[styles.calendarContainer, {opacity: showCalendar ? 1 : 0}]}
+          initialDate={date ? date.toISODate() : DateTime.now().toISODate()}
+          style={styles.calendarContainer}
           hideExtraDays={true}
-          enableSwipeMonths={true}
+          disableMonthChange={true}
+          hideArrows={true}
+          customHeader={() => null}
           theme={{
             textSectionTitleDisabledColor: COLORS.black80,
-            todayTextColor: COLORS.black80,
+            todayTextColor: COLORS.green,
             dayTextColor: COLORS.black60,
             arrowColor: COLORS.black80,
           }}

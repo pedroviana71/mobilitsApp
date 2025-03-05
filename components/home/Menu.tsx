@@ -5,57 +5,63 @@ import Animated, {FadeInRight} from 'react-native-reanimated';
 import {COLORS, FONTS} from '../../utils/styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
+import {delay} from '@reduxjs/toolkit/dist/utils';
 
 type MenuScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Menu'>;
 };
+interface screen {
+  name: keyof RootStackParamList;
+  title: string;
+  delay: number;
+}
+
+const screens: screen[] = [
+  {
+    name: 'AccountCreditCardManager',
+    title: 'Gerenciar contas e cartões',
+    delay: 100,
+  },
+  {
+    name: 'Home',
+    title: 'Metas',
+    delay: 150,
+  },
+  {
+    name: 'Profile',
+    title: 'Perfil',
+    delay: 200,
+  },
+  // {
+  //   name: 'Home',
+  //   title: 'Transações',
+  //   delay: 250,
+  // },
+  // {
+  //   name: 'Home',
+  //   title: 'Contas recorrentes',
+  //   delay: 250,
+  // },
+];
 
 const Menu = ({navigation}: MenuScreenProps) => {
   return (
     <Animated.View style={styles.container}>
-      <TouchableOpacity onPress={() => {}}>
-        <Animated.Text entering={FadeInRight.delay(100)} style={styles.text}>
-          Contas Recorrentes
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity
-        onPress={() => navigation.navigate('AccountCreditCardManager')}>
-        <Animated.Text entering={FadeInRight.delay(150)} style={styles.text}>
-          Gerenciar cartões de cŕedito
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity
-        onPress={() => navigation.navigate('AccountCreditCardManager')}>
-        <Animated.Text entering={FadeInRight.delay(200)} style={styles.text}>
-          Gerenciar contas
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity onPress={() => {}}>
-        <Animated.Text entering={FadeInRight.delay(250)} style={styles.text}>
-          Gráficos e tendências
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity onPress={() => {}}>
-        <Animated.Text entering={FadeInRight.delay(300)} style={styles.text}>
-          Metas
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity onPress={() => {}}>
-        <Animated.Text entering={FadeInRight.delay(350)} style={styles.text}>
-          Perfil
-        </Animated.Text>
-      </TouchableOpacity>
-      <HorizontalSeparator />
-      <TouchableOpacity onPress={() => {}}>
-        <Animated.Text entering={FadeInRight.delay(400)} style={styles.text}>
-          Transações
-        </Animated.Text>
-      </TouchableOpacity>
+      {screens.map((screen, index) => (
+        <View key={index}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(screen.name as keyof RootStackParamList);
+            }}>
+            <Animated.Text
+              entering={FadeInRight.delay(100)}
+              style={styles.text}>
+              {screen.title}
+            </Animated.Text>
+          </TouchableOpacity>
+          <HorizontalSeparator />
+        </View>
+      ))}
     </Animated.View>
   );
 };

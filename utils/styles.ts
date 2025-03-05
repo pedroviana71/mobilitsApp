@@ -9,6 +9,7 @@ export const COLORS = {
   background: '#F9FFFB',
   text: '#333333',
   red: '#FF7A57',
+  separator: '#E9ECED',
 };
 
 export const FONTS = {

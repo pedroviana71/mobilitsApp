@@ -8,7 +8,7 @@ import {RootState} from '../../app/store';
 import {useSelector} from 'react-redux';
 import CurrencyInput from '../custom/Form/CurrencyInput';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
-import PickDate from '../custom/Form/PickDate';
+import QuickPickDate from '../custom/Form/QuickPickDate';
 import {DateTime} from 'luxon';
 import PickPaymentType from '../custom/Form/PaymentType';
 import ScreenHeader from '../custom/ScreenHeader';
@@ -56,12 +56,10 @@ const Revenue = ({navigation}: RevenueProps) => {
         actionText="receita"
         justifyContent="center"
       />
-      <ScrollView style={styles.inputsContainer}>
-        <CurrencyInput
-          value={value}
-          handleInputChange={setValue}
-          color={COLORS.green}
-        />
+      <ScrollView
+        style={styles.inputsContainer}
+        contentContainerStyle={{padding: 16}}>
+        <CurrencyInput handleInputChange={setValue} color={COLORS.green} />
         <HorizontalSeparator />
         <View style={styles.inputs}>
           <Text style={styles.label}>Título</Text>
@@ -88,7 +86,7 @@ const Revenue = ({navigation}: RevenueProps) => {
           />
         </View>
         <HorizontalSeparator />
-        <PickDate
+        <QuickPickDate
           date={date}
           setDate={setDate}
           backgroundColor={COLORS.green}
@@ -141,12 +139,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   inputsContainer: {
-    backgroundColor: '#FFFFFF',
-    borderTopEndRadius: 16,
-    borderTopStartRadius: 16,
-    paddingHorizontal: 16,
+    backgroundColor: COLORS.background,
     flexGrow: 1,
-    paddingBottom: 100,
   },
   inputs: {
     marginVertical: 16,

@@ -20,6 +20,7 @@ import {COLORS} from './utils/styles';
 import Menu from './components/home/Menu';
 import AccountCreditCardManager from './components/accountAndCreditCards/AccountCreditCardManager';
 import NewAccount from './components/accountAndCreditCards/NewAccount';
+import NewCreditCard from './components/accountAndCreditCards/NewCreditCard';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   Revenue: undefined;
   AccountCreditCardManager: undefined;
   NewAccount: undefined;
+  NewCreditCard: undefined;
 };
 
 type ScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -87,6 +89,13 @@ function App(): JSX.Element {
               {(props: ScreenProps<'NewAccount'>) => (
                 <MainLayout showFooter={false}>
                   <NewAccount {...props} />
+                </MainLayout>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="NewCreditCard">
+              {(props: ScreenProps<'NewCreditCard'>) => (
+                <MainLayout showFooter={false}>
+                  <NewCreditCard {...props} />
                 </MainLayout>
               )}
             </Stack.Screen>

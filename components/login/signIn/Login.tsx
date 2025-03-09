@@ -19,6 +19,7 @@ type UserCredentialsProps = {
 const Login = ({navigation}: UserCredentialsProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
 
@@ -31,9 +32,11 @@ const Login = ({navigation}: UserCredentialsProps) => {
   };
 
   const handleSignIn = async () => {
+    setIsLoading(true);
     const response = await login({email, password});
 
     if ('error' in response) {
+      setIsLoading(false);
       console.log('response signin error', response.error);
       return;
     }
@@ -57,6 +60,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
     );
 
     dispatch(setUser(response.data.user));
+    setIsLoading(false);
 
     navigation.reset({index: 0, routes: [{name: 'Home'}]});
   };
@@ -92,6 +96,7 @@ const Login = ({navigation}: UserCredentialsProps) => {
           onPress={handleSignIn}
           shadowColor={COLORS.black20}
           elevation={10}
+          loading={loading}
         />
         <AppButton
           title="Esqueci a senha"

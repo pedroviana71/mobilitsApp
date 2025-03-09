@@ -10,7 +10,7 @@ import CurrencyInput from '../custom/Form/CurrencyInput';
 import HorizontalSeparator from '../custom/HorizontalSeparator';
 import QuickPickDate from '../custom/Form/QuickPickDate';
 import {DateTime} from 'luxon';
-import PickPaymentType from '../custom/Form/PaymentType';
+import PickPaymentType from '../custom/Form/PickPaymentType';
 import ScreenHeader from '../custom/ScreenHeader';
 import MenuDropdown from '../custom/Form/MenuDropdown';
 import {useGetAccountsQuery} from '../../services/account';
@@ -24,6 +24,7 @@ type RevenueProps = {
 export const PAYMENT_TYPES = {
   SINGLE: 'single',
   RECURRING: 'recurring',
+  INSTALLMENT: 'installment',
 } as const;
 
 export type PaymentType = (typeof PAYMENT_TYPES)[keyof typeof PAYMENT_TYPES];

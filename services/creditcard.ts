@@ -1,22 +1,25 @@
-import {ICreateAccount, ICreateAppResponse} from '../types/app.types';
+import {
+  ICreateCreditCard,
+  ICreditCardResponse,
+} from '../types/creditCard.types';
 import {api} from './api';
 
 const creditCard = api.injectEndpoints({
   endpoints: build => ({
-    createCreditCard: build.mutation<ICreateAppResponse, ICreateAccount>({
-      query: account => ({
-        url: '/account/create',
+    createCreditCard: build.mutation<ICreditCardResponse, ICreateCreditCard>({
+      query: creditCard => ({
+        url: '/creditCard/create',
         method: 'POST',
-        body: account,
+        body: creditCard,
       }),
-      invalidatesTags: ['Account'],
+      invalidatesTags: ['CreditCard'],
     }),
-    getCreditCards: build.query<ICreateAppResponse[], string>({
+    getCreditCards: build.query<ICreditCardResponse[], string>({
       query: userId => ({
-        url: `/account?userId=${userId}`,
+        url: `/creditCard?userId=${userId}`,
         method: 'GET',
       }),
-      providesTags: ['Account'],
+      providesTags: ['CreditCard'],
     }),
   }),
   overrideExisting: true,

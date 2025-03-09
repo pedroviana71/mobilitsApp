@@ -12,6 +12,8 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../app/store';
 import PickDay from '../custom/Form/PickDay';
 import {DateTime} from 'luxon';
+import {useCreateCreditCardMutation} from '../../services/creditcard';
+import {ICreateCreditCard} from '../../types/creditCard.types';
 
 type NewCreditCardProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewCreditCard'>;
@@ -19,25 +21,29 @@ type NewCreditCardProps = {
 
 const NewCreditCard = ({navigation}: NewCreditCardProps) => {
   const user = useSelector((state: RootState) => state.user);
-  const [balance, setBalance] = useState(0);
+  const [limit, setLimit] = useState(0);
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
   const [dueDate, setDueDate] = useState<DateTime | null>(null);
   const [closingDate, setClosingDate] = useState<DateTime | null>(null);
 
-  const [createAccount] = useCreateAccountMutation();
+  const [createCreditCard] = useCreateCreditCardMutation();
 
   const handleCreateCreditCard = async () => {
-    const account = {
+    const creditCard: ICreateCreditCard = {
       userId: user._id,
-      balance,
+      limit,
       name,
       color,
+      dueDay: dueDate ? dueDate.day : DateTime.now().day,
+      closingDay: closingDate ? closingDate.day : DateTime.now().day,
     };
-    const acccountResponse = await createAccount(account);
+    console.log(creditCard);
 
-    if ('error' in acccountResponse) {
-      console.log(acccountResponse.error);
+    const creditCardResponse = await createCreditCard(creditCard);
+
+    if ('error' in creditCardResponse) {
+      console.log(creditCardResponse.error);
       return;
     }
 
@@ -54,7 +60,7 @@ const NewCreditCard = ({navigation}: NewCreditCardProps) => {
       <View style={styles.inputsContainer}>
         <View>
           <Text style={styles.label}>Limite do cartão:</Text>
-          <CurrencyInput color={COLORS.green} handleInputChange={setBalance} />
+          <CurrencyInput color={COLORS.green} handleInputChange={setLimit} />
           <View style={styles.inputs}>
             <Text style={styles.label}>Nome do cartão</Text>
             <TextInput

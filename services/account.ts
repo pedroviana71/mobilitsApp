@@ -1,9 +1,9 @@
-import {ICreateAccount, ICreateAppResponse} from '../types/app.types';
+import {ICreateAccount, IAccountResponse} from '../types/account.types';
 import {api} from './api';
 
 const accountApi = api.injectEndpoints({
   endpoints: build => ({
-    createAccount: build.mutation<ICreateAppResponse, ICreateAccount>({
+    createAccount: build.mutation<IAccountResponse, ICreateAccount>({
       query: account => ({
         url: '/account/create',
         method: 'POST',
@@ -11,7 +11,7 @@ const accountApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Account'],
     }),
-    getAccounts: build.query<ICreateAppResponse[], string>({
+    getAccounts: build.query<IAccountResponse[], string>({
       query: userId => ({
         url: `/account?userId=${userId}`,
         method: 'GET',

@@ -89,7 +89,10 @@ const Footer = () => {
               width="100%"
             />
             <AppButton
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('Expense');
+                toggleSheet();
+              }}
               title="Despesa"
               backgroundColor={COLORS.red}
               textColor={COLORS.black80}

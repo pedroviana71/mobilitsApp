@@ -5,8 +5,9 @@ export interface ICreateAccount {
   balance: number;
 }
 
-export interface ICreateAppResponse extends ICreateAccount {
+export interface IAccountResponse extends ICreateAccount {
   _id: string;
   createdAt: string;
+  updatedAt: string;
   isActive: boolean;
 }

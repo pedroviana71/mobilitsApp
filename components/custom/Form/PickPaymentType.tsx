@@ -18,48 +18,57 @@ const PickPaymentType = ({paymentType, setPaymentType}: PaymentTypeProps) => {
 
   const isRecurring = paymentType === PAYMENT_TYPES.RECURRING;
 
+  const isInstallment = paymentType === PAYMENT_TYPES.INSTALLMENT;
+
+  const paymentTypes = [
+    {
+      title: 'Único',
+      typeCheck: isSingle,
+      onPress: () => {
+        handlePaymentType(PAYMENT_TYPES.SINGLE);
+      },
+    },
+    {
+      title: 'Recorrente',
+      typeCheck: isRecurring,
+      onPress: () => {
+        handlePaymentType(PAYMENT_TYPES.RECURRING);
+      },
+    },
+    {
+      title: 'Parcelado',
+      typeCheck: isInstallment,
+      onPress: () => {
+        handlePaymentType(PAYMENT_TYPES.INSTALLMENT);
+      },
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Lançamento</Text>
       <View style={styles.paymentTypeContainer}>
-        <TouchableOpacity
-          style={[
-            styles.paymentBox,
-            isSingle && {
-              backgroundColor: COLORS.black80,
-            },
-          ]}
-          onPress={() => {
-            handlePaymentType(PAYMENT_TYPES.SINGLE);
-          }}>
-          <Text
+        {paymentTypes.map((payment, index) => (
+          <TouchableOpacity
+            key={index}
             style={[
-              styles.paymentText,
-              isSingle && {
-                color: COLORS.white,
+              styles.paymentBox,
+              payment.typeCheck && {
+                backgroundColor: COLORS.black80,
               },
-            ]}>
-            Único
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.paymentBox,
-            isRecurring && {backgroundColor: COLORS.black80},
-          ]}
-          onPress={() => {
-            handlePaymentType(PAYMENT_TYPES.RECURRING);
-          }}>
-          <Text
-            style={[
-              styles.paymentText,
-              isRecurring && {
-                color: COLORS.white,
-              },
-            ]}>
-            Recorrente
-          </Text>
-        </TouchableOpacity>
+            ]}
+            onPress={payment.onPress}>
+            <Text
+              style={[
+                styles.paymentText,
+                payment.typeCheck && {
+                  color: COLORS.white,
+                },
+              ]}>
+              {payment.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );

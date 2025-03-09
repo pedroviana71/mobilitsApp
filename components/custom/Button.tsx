@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {COLORS} from '../../utils/styles';
 
 interface ButtonProps {
   title: string;
@@ -11,6 +18,7 @@ interface ButtonProps {
   elevation?: number;
   shadowColor?: string;
   fontSize?: number;
+  loading?: boolean;
 }
 
 const AppButton = ({
@@ -23,14 +31,26 @@ const AppButton = ({
   elevation,
   shadowColor,
   fontSize,
+  loading,
 }: ButtonProps) => {
   const fontSizeNumber = fontSize ? fontSize : 16;
-  
+
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator color={COLORS.green} />
+      </View>
+    );
+  }
+
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[
-      styles.container,
-      {backgroundColor, width, elevation, shadowColor},
-    ]}>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.9}
+      style={[
+        styles.container,
+        {backgroundColor, width, elevation, shadowColor},
+      ]}>
       <View>
         <Text
           style={[

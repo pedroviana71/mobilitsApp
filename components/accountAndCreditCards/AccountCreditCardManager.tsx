@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import AppButton from '../custom/Button';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../App';
@@ -12,6 +12,7 @@ import HorizontalSeparator from '../custom/HorizontalSeparator';
 import {priceMask} from '../../utils/priceMask';
 import Animated, {FadeInRight} from 'react-native-reanimated';
 import {BottomSheet} from '../custom/BottomSheet';
+import {useGetCreditCardsQuery} from '../../services/creditcard';
 
 type AccountCreditCardManagerProps = {
   navigation: NativeStackNavigationProp<
@@ -26,6 +27,7 @@ const AccountCreditCardManager = ({
   const user = useSelector((state: RootState) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const {data: accounts} = useGetAccountsQuery(user._id);
+  const {data: creditCards} = useGetCreditCardsQuery(user._id);
 
   const handleNavigation = (screen: keyof RootStackParamList) => {
     navigation.navigate(screen);
@@ -34,49 +36,76 @@ const AccountCreditCardManager = ({
 
   return (
     <View style={styles.container}>
-      <View>
-        <ScreenHeader
-          preText="gerencie seus"
-          actionText="cartões e contas correntes"
-          backgroundColor={COLORS.green}
-          justifyContent="flex-start"
-        />
-        <View>
+      <ScreenHeader
+        preText="gerencie seus"
+        actionText="cartões e contas correntes"
+        backgroundColor={COLORS.green}
+        justifyContent="flex-start"
+      />
+      <ScrollView>
+        <View style={styles.cardContainer}>
+          <Text style={styles.titleContainer}>Contas correntes e carteira</Text>
+          <HorizontalSeparator />
           <View>
-            <Text>Cartoes de credito</Text>
-          </View>
-          <View style={styles.cardContainer}>
-            <Text style={styles.titleContainer}>
-              Contas correntes e carteira
-            </Text>
-            <HorizontalSeparator />
-            <View>
-              {accounts?.map((account, index) => (
-                <Animated.View
-                  entering={FadeInRight.delay(index * 100)}
-                  key={account._id}
-                  style={styles.card}>
-                  <View style={styles.cardHeader}>
-                    <View
-                      style={[
-                        styles.colorMarker,
-                        {backgroundColor: account.color},
-                      ]}
-                    />
-                    <Text style={styles.name}>{account.name}</Text>
+            {creditCards?.map((creditCard, index) => (
+              <Animated.View
+                entering={FadeInRight.delay(index * 100)}
+                key={creditCard._id}
+                style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View
+                    style={[
+                      styles.colorMarker,
+                      {backgroundColor: creditCard.color},
+                    ]}
+                  />
+                  <View>
+                    <Text style={styles.name}>{creditCard.name}</Text>
+                    <View style={styles.dueDayContainer}>
+                      <Text style={styles.dueDay}>Vencimento </Text>
+                      <Text style={styles.dueDayBold}>{creditCard.dueDay}</Text>
+                    </View>
                   </View>
-                  <View style={styles.balanceContainer}>
-                    <Text style={styles.label}>Saldo disponivel:</Text>
-                    <Text style={styles.currentBalance}>
-                      R$ {priceMask(JSON.stringify(account.balance))}
-                    </Text>
-                  </View>
-                </Animated.View>
-              ))}
-            </View>
+                </View>
+                <View style={styles.balanceContainer}>
+                  <Text style={styles.label}>Limite:</Text>
+                  <Text style={styles.currentBalance}>
+                    R$ {priceMask(JSON.stringify(creditCard.limit))}
+                  </Text>
+                </View>
+              </Animated.View>
+            ))}
           </View>
         </View>
-      </View>
+        <View style={styles.cardContainer}>
+          <Text style={styles.titleContainer}>Contas correntes e carteira</Text>
+          <HorizontalSeparator />
+          <View>
+            {accounts?.map((account, index) => (
+              <Animated.View
+                entering={FadeInRight.delay(index * 100)}
+                key={account._id}
+                style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View
+                    style={[
+                      styles.colorMarker,
+                      {backgroundColor: account.color},
+                    ]}
+                  />
+                  <Text style={styles.name}>{account.name}</Text>
+                </View>
+                <View style={styles.balanceContainer}>
+                  <Text style={styles.label}>Saldo disponivel:</Text>
+                  <Text style={styles.currentBalance}>
+                    R$ {priceMask(JSON.stringify(account.balance))}
+                  </Text>
+                </View>
+              </Animated.View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <AppButton
           title="Adicionar cartão ou conta"
@@ -146,7 +175,7 @@ const styles = StyleSheet.create({
     color: COLORS.black80,
   },
   colorMarker: {
-    height: 36,
+    height: 42,
     width: 4,
     borderRadius: 4,
   },
@@ -188,6 +217,16 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.medium,
     color: COLORS.black60,
     paddingBottom: 4,
+  },
+  dueDayContainer: {
+    flexDirection: 'row',
+  },
+  dueDay: {
+    fontFamily: FONTS.light,
+  },
+  dueDayBold: {
+    color: COLORS.black80,
+    fontFamily: FONTS.medium,
   },
   buttonContainer: {
     width: '100%',

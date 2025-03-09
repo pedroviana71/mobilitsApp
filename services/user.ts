@@ -1,6 +1,5 @@
 import {
   UserLogin,
-  UserRegister,
   LoginResponse,
   User,
   CreateUserResponse,

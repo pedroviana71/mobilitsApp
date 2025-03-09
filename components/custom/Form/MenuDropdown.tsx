@@ -14,7 +14,9 @@ import {FlatList} from 'react-native';
 
 interface ISelectList {
   selectedItem: {name: string; _id: string} | '';
-  handleInputItem: Dispatch<SetStateAction<{name: string; _id: string} | ''>>;
+  handleInputItem:
+    | Dispatch<SetStateAction<{name: string; _id: string} | ''>>
+    | ((arg0: any) => void);
   data: {name: string; _id: string}[];
   label: string;
 }
